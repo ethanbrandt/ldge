@@ -7,7 +7,6 @@ class Actor {
 public:
     Actor()
         : texture(nullptr)
-    //assigns area derived from spritesheet
     {
         destRect = { 0, 0, 32, 32 };
         srcRect = { 0, 0, 32, 32 };
@@ -68,6 +67,12 @@ public:
         if (!texture) return;
 
         SDL_RenderTexture(renderer, texture, &srcRect, &destRect);
+    }
+    void unRegister() {
+        if (texture) {
+            SDL_DestroyTexture(texture);
+            texture = nullptr;
+        }
     }
 
 private:
