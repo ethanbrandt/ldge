@@ -138,41 +138,40 @@ class InputManager
 				keyboard[it->first].wasReleased = false;
 			}
 
-				if (keyboard.find(event->key.key) == keyboard.end())
-				{
-					keyboard[event->key.key].isPressed = false;
-					keyboard[event->key.key].wasPressedDown = false;
-					keyboard[event->key.key].wasReleased = false;
-				}
-
-				//this is the first frame the key is being pressed down
-				if (keyboard[event->key.key].isPressed == false && event->key.type == SDL_EVENT_KEY_DOWN)
-				{
-					keyboard[event->key.key].wasPressedDown = true;
-					keyboard[event->key.key].isPressed = true;
-					keyboard[event->key.key].wasReleased = false;
-				}
-				//this is the case if the key was up and is still up (not pressed down)
-				else if (keyboard[event->key.key].isPressed == false && event->key.type == SDL_EVENT_KEY_UP)
-				{
-					keyboard[event->key.key].wasPressedDown = false;
-					keyboard[event->key.key].isPressed = false;
-					keyboard[event->key.key].wasReleased = false;
-				}
-				//key is pressed down, and is still down
-				else if (keyboard[event->key.key].isPressed == true && event->key.type == SDL_EVENT_KEY_DOWN)
-				{
-					keyboard[event->key.key].wasPressedDown = false;
-					keyboard[event->key.key].isPressed = true;
-					keyboard[event->key.key].wasReleased = false;
-				}
-				//the key was pressed down, but is now up
-				else if (keyboard[event->key.key].isPressed == true && event->key.type == SDL_EVENT_KEY_UP)
-				{
-					keyboard[event->key.key].wasPressedDown = false;
-					keyboard[event->key.key].isPressed = false;
-					keyboard[event->key.key].wasReleased = true;
-				}
-
+			if (keyboard.find(event->key.key) == keyboard.end())
+			{
+				keyboard[event->key.key].isPressed = false;
+				keyboard[event->key.key].wasPressedDown = false;
+				keyboard[event->key.key].wasReleased = false;
 			}
+
+			//this is the first frame the key is being pressed down
+			if (keyboard[event->key.key].isPressed == false && event->key.type == SDL_EVENT_KEY_DOWN)
+			{
+				keyboard[event->key.key].wasPressedDown = true;
+				keyboard[event->key.key].isPressed = true;
+				keyboard[event->key.key].wasReleased = false;
+			}
+			//this is the case if the key was up and is still up (not pressed down)
+			else if (keyboard[event->key.key].isPressed == false && event->key.type == SDL_EVENT_KEY_UP)
+			{
+				keyboard[event->key.key].wasPressedDown = false;
+				keyboard[event->key.key].isPressed = false;
+				keyboard[event->key.key].wasReleased = false;
+			}
+			//key is pressed down, and is still down
+			else if (keyboard[event->key.key].isPressed == true && event->key.type == SDL_EVENT_KEY_DOWN)
+			{
+				keyboard[event->key.key].wasPressedDown = false;
+				keyboard[event->key.key].isPressed = true;
+				keyboard[event->key.key].wasReleased = false;
+			}
+			//the key was pressed down, but is now up
+			else if (keyboard[event->key.key].isPressed == true && event->key.type == SDL_EVENT_KEY_UP)
+			{
+				keyboard[event->key.key].wasPressedDown = false;
+				keyboard[event->key.key].isPressed = false;
+				keyboard[event->key.key].wasReleased = true;
+			}
+		}
 };

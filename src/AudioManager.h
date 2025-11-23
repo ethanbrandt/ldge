@@ -51,6 +51,8 @@ public:
 		else if (!SDL_BindAudioStream(*this->audio_device_id, this->stream)) {  /* once bound, it'll start playing when there is data available! */
 			sprintf_s(buffer, "\nFailed to bind stream to device: %s", SDL_GetError());
 		}
+
+		return true;
 	}
 
 	void PlaySound()

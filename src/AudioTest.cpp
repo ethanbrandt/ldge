@@ -48,32 +48,32 @@ SDL_AppResult SDL_AppIterate(void* appstate)
     manager->PlayAllSongs();
 
     //tests swinging a sword sound over the BGM
-    if (test.IsPressed('a'))
+    if (test.WasPressedDown('a'))
     {
-        std::cout << "the a key is pressed" << std::endl;
+        //std::cout << "the a key is pressed" << std::endl;
         manager->PlaySound("game_sword.wav"); //waits for every sound to finish before playing the next one if held down
     }
     //reduces the volume of the test bgm
-    if (test.IsPressed('s'))
+    if (test.WasPressedDown('s'))
     {
         std::cout << "the s key is pressed" << std::endl;
         manager->SetSongVolume("game_music.wav", .2);
     }
     //pauses all the audio
-    if (test.IsPressed('d'))
+    if (test.WasPressedDown('d'))
     {
         std::cout << "the d key is pressed" << std::endl;
         manager->PauseAllAudio(); 
     }
     //resumes all the audio
-    if (test.IsPressed('f'))
+    if (test.WasPressedDown('f'))
     {
         std::cout << "the f key is pressed" << std::endl;
         manager->ResumeAllAudio(); 
     }
     
     //deletes all the songs, so this will stop playing the bgm
-    if (test.IsPressed('g'))
+    if (test.WasPressedDown('g'))
     {
         std::cout << "the g key is pressed" << std::endl;
         manager->DeleteAllSongs(); 
