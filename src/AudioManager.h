@@ -77,7 +77,7 @@ public:
 		//if song is not meant to loop, queues it up once to be played
 		else
 		{
-			if (SDL_GetAudioStreamQueued(this->stream) == 0)
+			if (SDL_GetAudioStreamAvailable(this->stream) == 0)
 			{
 				test_bool = SDL_PutAudioStreamData(this->stream, this->wav_data, this->wav_data_len);
 				if (test_bool == 0)
@@ -133,6 +133,12 @@ class AudioManager
 				sprintf_s(buffer, "\nFailed to audio device: %s", SDL_GetError());
 				std::cout << buffer << std::endl;
 			}
+		}
+
+		~AudioManager()
+		{
+			audioManager->DeleteAllSongs();
+    		audioManager->DeleteAllSounds();
 		}
 
 		AudioStream* CreateAudioStream(std::string filepath)

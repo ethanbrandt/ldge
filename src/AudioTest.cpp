@@ -1,6 +1,5 @@
 #include "InputManager.h"
 #include "AudioManager.h"
-#include "EventHandler.h"
 
 #include <SDL3/SDL.h>
 #include <iostream>
@@ -9,7 +8,6 @@
 
 InputManager inputManager;
 AudioManager* audioManager;
-EventHandler* eventHandler;
 
 void HandleQuit();
 
@@ -23,8 +21,6 @@ int main()
     
     //creates an instance of the audioaudioManager 
     audioManager = new AudioManager();
-
-	eventHandler = new EventHandler(&inputManager);
 
     //creates the window so that it takes inputs and does sounds
     SDL_CreateWindowAndRenderer("examples/audio/multiple-streams", 640, 480, SDL_WINDOW_RESIZABLE, &window, &renderer);  
@@ -97,9 +93,5 @@ int main()
 
 void HandleQuit()
 {
-	audioManager->DeleteAllSongs();
-    audioManager->DeleteAllSounds();
-
 	delete audioManager;
-	delete eventHandler;
 }
