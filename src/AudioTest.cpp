@@ -37,6 +37,7 @@ int main()
 
 	while (true)
 	{
+		inputManager.UpdateInput();
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
@@ -59,7 +60,7 @@ int main()
 		//tests swinging a sword sound over the BGM
 		if (inputManager.WasPressedDown('a'))
 		{
-			//std::cout << "the a key is pressed" << std::endl;
+			std::cout << "the a key is pressed" << std::endl;
 			audioManager->PlaySound("game_sword.wav"); //waits for every sound to finish before playing the next one if held down
 		}
 		//reduces the volume of the inputManager bgm

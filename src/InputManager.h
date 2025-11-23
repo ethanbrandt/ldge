@@ -121,6 +121,19 @@ class InputManager
 			return keyboard[key].wasReleased;
 		}
 
+		void UpdateInput()
+		{
+			for (auto it = keyboard.begin(); it != keyboard.end(); ++it)
+			{
+				if (keyboard[it->first].isPressed == true && keyboard[it->first].wasPressedDown == true)
+				{
+					keyboard[it->first].wasPressedDown = false;
+					keyboard[it->first].isPressed = true;
+					keyboard[it->first].wasReleased = false;
+				}
+			}
+		}
+
 		void HandleInputEvent(SDL_Event* event)
 		{
 			/*Uses PollEvent to listen to the event. IDs the key from the event.
