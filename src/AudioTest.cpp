@@ -59,6 +59,12 @@ int main()
 			std::cout << "the a key is pressed" << std::endl;
 			audioManager->PlaySound("game_sword.wav"); //waits for every sound to finish before playing the next one if held down
 		}
+		//test outputs error since file was not added properly
+		if (inputManager.WasPressedDown('w'))
+		{
+			std::cout << "the w key is pressed" << std::endl;
+			audioManager->PlaySound("fake.wave"); //should output error message since file isn't real
+		}
 		//reduces the volume of the inputManager bgm
 		if (inputManager.WasPressedDown('s'))
 		{

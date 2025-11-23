@@ -135,10 +135,14 @@ class AudioManager
 			}
 		}
 
-		~AudioManager()
+		~AudioManager() //destructor
+		/*
+		* Deletes all the stored songs and sounds subobjects
+		* Once all the subobjects are removed, it should delete itself
+		*/
 		{
-			audioManager->DeleteAllSongs();
-    		audioManager->DeleteAllSounds();
+			this->DeleteAllSongs();
+    		this->DeleteAllSounds();
 		}
 
 		AudioStream* CreateAudioStream(std::string filepath)
@@ -175,7 +179,14 @@ class AudioManager
 			/*
 			Play a Sound effect,etc that is only meant to be played once per keypress
 			*/
-			nonLoopingSounds[filename]->PlaySound();
+			if (nonLoopingSounds.find(filename) != nonLoopingSounds.end())
+			{
+				nonLoopingSounds[filename]->PlaySound();
+			}
+			else
+			{
+				std::cout << "Error playing sound. Check filepath, file name, or that it was added." << std::endl;
+			}
 		}
 
 		void PlayAllSongs()
@@ -218,9 +229,12 @@ class AudioManager
 			/*
 			used to delete an item from the loopingSound map
 			*/
-			loopingSounds[filename]->DestroyAudioStream();
-			delete loopingSounds[filename];
-			loopingSounds.erase(filename);
+			if (loopingSounds.find(filename) != loopingSounds.end())
+			{
+				loopingSounds[filename]->DestroyAudioStream();
+				delete loopingSounds[filename];
+				loopingSounds.erase(filename);
+			}
 		}
 
 		void DeleteASound(std::string filename)
@@ -228,9 +242,12 @@ class AudioManager
 			/*
 			used to delete an item from the nonLoopingSound map
 			*/
-			nonLoopingSounds[filename]->DestroyAudioStream();
-			delete nonLoopingSounds[filename];
-			nonLoopingSounds.erase(filename);
+			if(nonLoopingSounds.find(filename) != nonLoopingSounds.end())
+			{
+				nonLoopingSounds[filename]->DestroyAudioStream();
+				delete nonLoopingSounds[filename];
+				nonLoopingSounds.erase(filename);
+			}
 		}
 
 		void SetSongVolume(std::string filename, float volume)
@@ -239,7 +256,10 @@ class AudioManager
 			Sets the volume for a song, that is meant to loop
 			only accepts float values from 0.0 to 1.0
 			*/
-			loopingSounds[filename]->SetVolume(volume);
+			if (loopingSounds.find(filename) != loopingSounds.end())
+			{
+				loopingSounds[filename]->SetVolume(volume);
+			}
 		}
 
 		void SetSoundVolume(std::string filename, float volume)
@@ -248,7 +268,10 @@ class AudioManager
 			Sets the volume for a sound, that is not meant to loop
 			only accepts float values from 0.0 to 1.0
 			*/
-			nonLoopingSounds[filename]->SetVolume(volume);
+			if (nonLoopingSounds.find(filename) != nonLoopingSounds.end())
+			{
+				nonLoopingSounds[filename]->SetVolume(volume);
+			}
 		}
 
 		void PauseAllAudio()
