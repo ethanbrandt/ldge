@@ -121,7 +121,7 @@ class InputManager
 			return keyboard[key].wasReleased;
 		}
 
-		void UpdateInput(SDL_Event* event)
+		void HandleInputEvent(SDL_Event* event)
 		{
 			/*Uses PollEvent to listen to the event. IDs the key from the event.
 			* Determines if that key is in the map, if not put the key in the map, 
