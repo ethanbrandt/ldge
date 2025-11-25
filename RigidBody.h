@@ -6,11 +6,27 @@
 
 
 struct CollisionResult
-{
+{   
+    
     bool collided;
+
+    //used for circ-circ collisions
     float depth;
     float radii;
     Vector2 normal;
+
+    float overlap; //used for circle-rect collisions
+
+    //these ones down here are used for rect-rect collisions
+    float overlapX;
+    float overlapY;
+
+    float overlapX1;
+    float overlapX2;
+    float overlapY1;
+    float overlapY2;
+    int type;
+
 
 };
 
@@ -35,8 +51,8 @@ public:
     void setMass(float newMass);
     void setShape(CollisionShape* newColShape);
     //only circles have been implemented for collision detection
-    CollisionResult DetectCollision(RigidBody a, RigidBody b);
-    void ResolveCollision(RigidBody a, RigidBody b);
+    static CollisionResult DetectCollision(RigidBody a, RigidBody b);
+    static void ResolveCollision(RigidBody a, RigidBody b);
     
 
 };
