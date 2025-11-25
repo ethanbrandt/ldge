@@ -50,7 +50,6 @@ public:
     void setVelocity(Vector2 newVel);
     void setMass(float newMass);
     void setShape(CollisionShape* newColShape);
-    //only circles have been implemented for collision detection
     static CollisionResult DetectCollision(RigidBody a, RigidBody b);
     static void ResolveCollision(RigidBody a, RigidBody b);
     
