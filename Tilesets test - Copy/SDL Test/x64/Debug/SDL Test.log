@@ -1,8 +1,0 @@
-﻿  RenManager.cpp
-C:\Users\asher\source\repos\Tilesets test - Copy\SDL Test\TileRenderer.h(119,28): warning C4804: '<': unsafe use of type 'bool' in operation
-  (compiling source file 'RenManager.cpp')
-  
-C:\Users\asher\source\repos\Tilesets test - Copy\SDL Test\RenManager.cpp(12,17): warning C4804: '<': unsafe use of type 'bool' in operation
-  SDL Test.vcxproj -> C:\Users\asher\source\repos\Tilesets test - Copy\x64\Debug\SDL Test.exe
-  'pwsh.exe' is not recognized as an internal or external command,
-  operable program or batch file.
