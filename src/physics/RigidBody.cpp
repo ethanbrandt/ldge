@@ -1,6 +1,6 @@
-	#include"RigidBody.h"
-	#include<typeinfo>
-	#include<cmath>
+	#include "RigidBody.h"
+	#include <typeinfo>
+	#include <cmath>
 	#include <algorithm>
 
 	RigidBody::RigidBody()

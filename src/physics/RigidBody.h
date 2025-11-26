@@ -1,8 +1,8 @@
 #pragma once
-#include"../Vector2.h"
-#include"CollisionShape.h"
-#include"CollisionCircle.h"
-#include"CollisionRectangle.h"
+#include "../utilities/Vector2.h"
+#include "CollisionShape.h"
+#include "CollisionCircle.h"
+#include "CollisionRectangle.h"
 
 enum CollisionType
 {
