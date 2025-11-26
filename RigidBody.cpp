@@ -4,6 +4,15 @@
 
 RigidBody::RigidBody()
 {
+    Vector2 newPosition(0,0);
+    Vector2 newVelocity(0,0);
+    float newMass = 0;
+    CollisionShape newColShape;
+
+    position = newPosition;
+    velocity = newVelocity;
+    mass = newMass;
+    colShape = newColShape;
 
 }
 
