@@ -1,11 +1,12 @@
-#include"Vector2.h"
+#pragma once
+#include"../Vector2.h"
 #include <cstdint>
 
 class CollisionShape
 {
 protected:
     Vector2 posOffset;
-    bool Trigger;
+    bool trigger;
     uint16_t collisionMask; 
 
 public:

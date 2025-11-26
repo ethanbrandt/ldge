@@ -7,11 +7,15 @@
 CollisionCircle::CollisionCircle()
 {
     radius = 1;
+    Vector2 pos(0,0);
+    trigger = false;
+    collisionMask = 0; 
+    posOffset = pos;
 }
 
-CollisionCircle::CollisionCircle(float newRadius)
+CollisionCircle::CollisionCircle(float _Radius, Vector2 _PosOffset, bool _IsTrigger, uint16_t _CollMask)
+: CollisionShape(_PosOffset, _IsTrigger, _CollMask), radius(_Radius) 
 {
-    radius = newRadius;
 }
 
 

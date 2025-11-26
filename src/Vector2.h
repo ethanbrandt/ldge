@@ -1,3 +1,4 @@
+#pragma once
 class Vector2
 {
 private:
@@ -11,8 +12,8 @@ public:
 
     void SetX(float _x);
     void SetY(float _y);
-    float GetX();
-    float GetY();
+    float GetX() const;
+    float GetY() const;
     float GetMagnitude();
 
 
@@ -26,3 +27,6 @@ public:
     static float dot(Vector2 _a, Vector2 _b);
 };
 
+
+Vector2 operator*(int scale, const Vector2& v);
+Vector2 operator*(float scale, const Vector2& v);

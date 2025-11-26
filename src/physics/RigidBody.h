@@ -1,4 +1,5 @@
-#include"Vector2.h"
+#pragma once
+#include"../Vector2.h"
 #include"CollisionShape.h"
 #include"CollisionCircle.h"
 #include"CollisionRectangle.h"
@@ -39,15 +40,14 @@ private:
     Vector2 velocity;
     float mass;
     CollisionShape* colShape;
-    Vector2 normal;
 
 	static CollisionResult DetectCircleCircleCollision(CollisionShape* _shapeA, CollisionShape* _shapeB, RigidBody& _a, RigidBody& _b);
 	static CollisionResult DetectRectangleRectangleCollision(CollisionShape *shapeA, CollisionShape *shapeB, RigidBody &_a, RigidBody &_b);
 	static CollisionResult DetectCircleRectangleCollision(CollisionShape* _shapeA, CollisionShape* _shapeB, RigidBody& _a, RigidBody& _b);
 
-	static void ResolveCircleCircleCollision(CollisionResult res, RigidBody &_a, RigidBody &_b);
-	static void ResolveRectangleRectangleCollision(CollisionResult res, RigidBody &_a, RigidBody &_b);
-	static void ResolveCircleRectangleCollision(CollisionResult res, RigidBody &_circle, RigidBody &_rect);
+	static void ResolveCircleCircleCollision(CollisionResult _res, RigidBody &_a, RigidBody &_b);
+	static void ResolveRectangleRectangleCollision(CollisionResult _res, RigidBody &_a, RigidBody &_b);
+	static void ResolveCircleRectangleCollision(CollisionResult _res, RigidBody &_circle, RigidBody &_rect);
 	
 public:
     RigidBody();

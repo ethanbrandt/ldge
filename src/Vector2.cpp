@@ -24,12 +24,12 @@ void Vector2::SetY(float _y)
     y = _y;
 }
 
-float Vector2::GetX()
+float Vector2::GetX() const
 {
     return x;
 }
 
-float Vector2::GetY()
+float Vector2::GetY() const
 {
     return y;
 }
@@ -80,6 +80,16 @@ Vector2 Vector2::operator*(float scale)
     float newY = scale * y;
 
     return Vector2(newX, newY);
+}
+
+Vector2 operator*(int scale, const Vector2& v)
+{
+    return Vector2(v.GetX() * scale, v.GetY() * scale);
+}
+
+Vector2 operator*(float scale, const Vector2& v)
+{
+    return Vector2(v.GetX() * scale, v.GetY() * scale);
 }
 
 float Vector2::dot(Vector2 _a, Vector2 _b)

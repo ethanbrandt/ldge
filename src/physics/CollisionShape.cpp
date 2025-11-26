@@ -5,20 +5,20 @@ CollisionShape::CollisionShape()
 {
     Vector2 pos(0,0);
     posOffset = pos;
-    Trigger = false;
+    trigger = false;
     collisionMask = 0;
 }
 
 CollisionShape::CollisionShape(Vector2 newPosOffset, bool newIsTrigger, uint16_t newCollMask)
 {
     posOffset = newPosOffset;
-    Trigger = newIsTrigger;
+    trigger = newIsTrigger;
     collisionMask = newCollMask;
 }
 
-bool CollisionShape::isTrigger()
+bool CollisionShape::IsTrigger()
 {
-    return Trigger;
+    return trigger;
 }
 
 uint16_t CollisionShape::GetColMask()
@@ -26,7 +26,7 @@ uint16_t CollisionShape::GetColMask()
     return collisionMask;
 }
 
-Vector2 CollisionShape::getOffset()
+Vector2 CollisionShape::GetOffset()
 {
     return posOffset;
 }
