@@ -8,33 +8,33 @@ Vector2::Vector2()
     y = 0;
 }
 
-Vector2::Vector2(float newX, float newY)
+Vector2::Vector2(float _x, float _y)
 {
-    x = newX;
-    y = newY;
+    x = _x;
+    y = _y;
 }
 
-void Vector2::setX(float newX)
+void Vector2::SetX(float _x)
 {
-    x = newX;
+    x = _x;
 }
 
-void Vector2::setY(float newY)
+void Vector2::SetY(float _y)
 {
-    y = newY;
+    y = _y;
 }
 
-float Vector2::getX()
+float Vector2::GetX()
 {
     return x;
 }
 
-float Vector2::getY()
+float Vector2::GetY()
 {
     return y;
 }
 
-float Vector2::getMagnitude()
+float Vector2::GetMagnitude()
 {
     return sqrt(pow(x,2) + pow(y,2));
 }
@@ -42,9 +42,9 @@ float Vector2::getMagnitude()
 
 Vector2 Vector2::Normalize(Vector2 a)
 {
-    float mag = a.getMagnitude();
-    float normX = a.getX() / mag;
-    float normY = a.getY() / mag;
+    float mag = a.GetMagnitude();
+    float normX = a.GetX() / mag;
+    float normY = a.GetY() / mag;
 
     return  Vector2(normX, normY);
 }
@@ -52,16 +52,16 @@ Vector2 Vector2::Normalize(Vector2 a)
 Vector2 Vector2::operator+(Vector2& other)
 {
      
-    float newX = x + other.getX();
-    float newY = y + other.getY();
+    float newX = x + other.GetX();
+    float newY = y + other.GetY();
 
     return Vector2(newX, newY);
 }
 
 Vector2 Vector2::operator-(Vector2& other)
 {
-    float newX = x - other.getX();
-    float newY = y - other.getY();
+    float newX = x - other.GetX();
+    float newY = y - other.GetY();
 
     return Vector2(newX, newY);
 }
@@ -82,7 +82,7 @@ Vector2 Vector2::operator*(float scale)
     return Vector2(newX, newY);
 }
 
-float Vector2::dot(Vector2 a, Vector2 b)
+float Vector2::dot(Vector2 _a, Vector2 _b)
 {
-    return (a.getX() * b.getX()) + (a.getY() * b.getY());
+    return (_a.GetX() * _b.GetX()) + (_a.GetY() * _b.GetY());
 }

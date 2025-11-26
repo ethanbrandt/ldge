@@ -12,9 +12,8 @@ public:
     CollisionShape(); //nothing is implemented
     CollisionShape(Vector2 newPosOffset, bool newIsTrigger, uint16_t newCollMask);
 
-    virtual float GetArea(){ return 0.0f; }; //tell him that c++ didn't allow it to be pure virtual
-    bool isTrigger(); 
+    virtual float GetArea() = 0; //tell him that c++ didn't allow it to be pure virtual
+    bool IsTrigger(); 
     uint16_t GetColMask();
-    Vector2 getOffset();
-
+    Vector2 GetOffset();
 };

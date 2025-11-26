@@ -3,16 +3,15 @@
 class CollisionRectangle : public CollisionShape
 {
 private:
-
-float width;
-float length;
+	float width;
+	float length;
 
 public:
     CollisionRectangle();
     CollisionRectangle(float newWidth, float newLength);
-    float getArea();
-    float getLength();
-    float getWidth();
-    void setWidth(float newWidth);
-    void setLength(float newLength);
+    float GetArea() override;
+    float GetLength();
+    float GetWidth();
+    void SetWidth(float newWidth);
+    void SetLength(float newLength);
 };

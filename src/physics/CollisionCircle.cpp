@@ -1,5 +1,8 @@
+#define _USE_MATH_DEFINES
+
 #include "CollisionCircle.h"
-#include<cmath>
+#include <cmath>
+
 
 CollisionCircle::CollisionCircle()
 {
@@ -12,17 +15,17 @@ CollisionCircle::CollisionCircle(float newRadius)
 }
 
 
-float CollisionCircle::getArea()
+float CollisionCircle::GetArea()
 {
     return M_PI * pow(radius,2);
 }
 
-float CollisionCircle::getRadius()
+float CollisionCircle::GetRadius()
 {
     return radius;
 }
 
-void CollisionCircle::setRadius(float newRadius)
+void CollisionCircle::SetRadius(float newRadius)
 {
     radius = newRadius;
 }

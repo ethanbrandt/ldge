@@ -8,8 +8,7 @@ private:
 public:
     CollisionCircle();
     CollisionCircle(float newRadius);
-    float getArea();
-    float getRadius();
-    void setRadius(float newRadius);
-
+    float GetArea() override;
+    float GetRadius();
+    void SetRadius(float newRadius);
 };

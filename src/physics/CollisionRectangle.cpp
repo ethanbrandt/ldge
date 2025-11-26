@@ -13,27 +13,27 @@ CollisionRectangle::CollisionRectangle(float newWidth, float newLength)
     width = newWidth;
 }
 
-float CollisionRectangle::getArea()
+float CollisionRectangle::GetArea()
 {
     return width * length;
 }
 
-float CollisionRectangle::getLength()
+float CollisionRectangle::GetLength()
 {
     return length;
 }
 
-float CollisionRectangle::getWidth()
+float CollisionRectangle::GetWidth()
 {
     return width;
 }
 
-void CollisionRectangle::setLength(float newLength)
+void CollisionRectangle::SetLength(float _length)
 {
-    length = newLength;
+    length = _length;
 }
 
-void CollisionRectangle::setWidth(float newWidth)
+void CollisionRectangle::SetWidth(float _width)
 {
-    width = newWidth;
+    width = _width;
 }

@@ -10,7 +10,7 @@ int main()
     Vector2 b(2,1);
     bool test;
 
-    if(a.getX() == 0 && a.getY() == 0)
+    if(a.GetX() == 0 && a.GetY() == 0)
     {
         test = true;
         cout<<test<<"\n";
@@ -21,7 +21,7 @@ int main()
         cout<<test<<"\n";
     }
     
-    if(b.getX() == 2 && b.getY() == 1)
+    if(b.GetX() == 2 && b.GetY() == 1)
     {
         test = true;
         cout<<test<<"\n";
@@ -32,10 +32,10 @@ int main()
         cout<<test<<"\n";
     }
 
-    a.setX(4);
-    a.setY(3);
+    a.SetX(4);
+    a.SetY(3);
 
-    if(a.getX() == 4 && a.getY() == 3)
+    if(a.GetX() == 4 && a.GetY() == 3)
     {
         test = true;
         cout<<test<<"\n";
@@ -46,7 +46,7 @@ int main()
         cout<<test<<"\n";
     }
 
-    if(a.getMagnitude() == 5)
+    if(a.GetMagnitude() == 5)
     {
         test = true;
         cout<<test<<"\n";
@@ -59,7 +59,7 @@ int main()
 
     Vector2 c = Vector2::Normalize(a);
 
-    if(c.getMagnitude() == 1)
+    if(c.GetMagnitude() == 1)
     {
         test = true;
         cout<<test<<"\n";
@@ -72,7 +72,7 @@ int main()
 
     c = a + b;
 
-    if(c.getX() == 6 && c.getY() == 4)
+    if(c.GetX() == 6 && c.GetY() == 4)
     {
         test = true;
         cout<<test<<"\n";
@@ -85,7 +85,7 @@ int main()
 
     c = a - b;
 
-    if(c.getX() == 2 && c.getY() == 2)
+    if(c.GetX() == 2 && c.GetY() == 2)
     {
         test = true;
         cout<<test<<"\n";
