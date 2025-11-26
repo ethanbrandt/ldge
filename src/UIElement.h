@@ -6,6 +6,9 @@
 
 
 class UIElement {
+protected:
+    int x, y;
+
 public:
     //generic variables that apply to both UIImage and UIText
     UIElement(int x = 0, int y = 0) : x(x), y(y) {}
@@ -13,31 +16,36 @@ public:
     virtual void Render(SDL_Renderer* ren) = 0;
     void SetPosition(int newX, int newY) { x = newX; y = newY; }
 
-protected:
-    int x, y;
 };
 
 
 class UIImage : public UIElement {
+private:
+    SDL_Texture* texture;
+    int width, height;
+    float scaleX, scaleY;
+    string spritePath; //added this Ethan :)
+
 public:
-  UIImage() : texture(nullptr), width(0), height(0), scaleX(1.0f), scaleY(1.0f) {}
-   ~UIImage() { if (texture) SDL_DestroyTexture(texture); }
+    UIImage() : texture(nullptr), width(0), height(0), scaleX(1.0f), scaleY(1.0f) {}
+    ~UIImage() { if (texture) SDL_DestroyTexture(texture); }
    //gets image loaded.
-    bool LoadImage(SDL_Renderer* ren, const std::string& filePath) {
+    void LoadImage(SDL_Renderer* ren, const std::string& filePath) {
         if (texture) SDL_DestroyTexture(texture);
 
         SDL_Surface* surface = SDL_LoadBMP(filePath.c_str());
-        if (!surface) {
+        if (!surface) 
             std::cerr << "LoadImage Error: " << SDL_GetError() << std::endl;
-            return false;
-        }
-      texture = SDL_CreateTextureFromSurface(ren, surface);
+            
+
+        texture = SDL_CreateTextureFromSurface(ren, surface);
         width = surface->w;
         height = surface->h;
         SDL_DestroySurface(surface);
-        if (!texture) {
+        if (!texture)
             std::cerr << "CreateTexture Error: " << SDL_GetError() << std::endl;
-            return false;}return true;}
+            
+        }
 
     //renders image. Goes into main while loop of the game.
     void Render(SDL_Renderer* ren) override {
@@ -54,10 +62,7 @@ public:
     }
     //this allows us to change size. Originally was supposed to be 2 functions but is more efficient this way
     void SetScale(float sx, float sy) { scaleX = sx; scaleY = sy; }
-private:
-    SDL_Texture* texture;
-    int width, height;
-    float scaleX, scaleY;
+
 };
 
 
@@ -67,6 +72,12 @@ private:
 
 
 class UIText : public UIElement {
+private:
+    SDL_Texture* texture;
+    std::string text;
+    int charWidth, charHeight;
+    std::unordered_map<char, SDL_Rect> charMap;
+    
 public:
     UIText(SDL_Texture* sheet, int charW, int charH)
         : texture(sheet), charWidth(charW), charHeight(charH) {
@@ -114,10 +125,5 @@ public:
         }
     }
 
-private:
-    SDL_Texture* texture;
-    std::string text;
-    int charWidth, charHeight;
-    std::unordered_map<char, SDL_Rect> charMap;
 };
 
