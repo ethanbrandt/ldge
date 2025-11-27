@@ -314,12 +314,16 @@
 
 		if(_a.GetMass() == -1)
 		{
+			std::cout << move.GetX() << ", " << move.GetY() << std::endl;
 			Vector2 move = _b.GetPosition() - move;
 			_b.SetPosition(move);
 		}
 		else if(_b.GetMass() == -1)
 		{
-			Vector2 move = _a.GetPosition() + move;
+			std::cout << move.GetX() << ", " << move.GetY() << std::endl;
+			Vector2 test = _a.GetPosition() + move;
+			Vector2 move = test;
+			std::cout << test.GetX() << ", " << test.GetY() << std::endl;
 			_a.SetPosition(move);
 		}
 		else
