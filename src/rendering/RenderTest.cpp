@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 	std::string fontAtlasOrder = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:?!-_~#";
 	std::string fontFilePath = "assets/awe-mono-gold-v2.bmp";
 	
-	renderManager.LoadFontAtlas(fontFilePath, fontAtlasOrder, 8, 16, 8, 0);
+	renderManager.LoadFontAtlas(fontFilePath, fontAtlasOrder, 8, 16, 8);
 
 	UIImage uiImage;
 	uiImage.LoadUIImage(renderer, "assets/lettuce.bmp");

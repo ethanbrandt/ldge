@@ -1,3 +1,4 @@
+#pragma once
 #include <SDL3/SDL.h>
 #include <vector>
 #include <algorithm>
@@ -90,8 +91,8 @@ public:
 		_uiText.SetFont(tex, fontAsset.fontMap, fontAsset.charWidth, fontAsset.charHeight);
 	}
 
-	// All font atlases must be monospaced with each character in a horizontal line
-	void LoadFontAtlas(const std::string& _fontAtlasFilePath, const std::string& _fontAtlasOrder, int _charWidth, int _charHeight, int _horizontalPadding, int _verticalPadding)
+	// All font atlases must be monospaced with each character in a single horizontal line
+	void LoadFontAtlas(const std::string& _fontAtlasFilePath, const std::string& _fontAtlasOrder, int _charWidth, int _charHeight, int _horizontalPadding)
 	{
 		int currX = 0;
 		std::unordered_map<char, SDL_Rect> fontMap;
