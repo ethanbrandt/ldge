@@ -2,6 +2,7 @@
 	#include <typeinfo>
 	#include <cmath>
 	#include <algorithm>
+	#include <iostream>
 
 	RigidBody::RigidBody()
 	{
@@ -78,11 +79,13 @@
 		CollisionShape* shapeA = _a.GetColShape();
 		CollisionShape* shapeB = _b.GetColShape();
 
-		if(typeid(*shapeA) == typeid(CollisionCircle) && typeid(*shapeA) == typeid(*shapeB))
+		if(typeid(*shapeA) == typeid(CollisionCircle) && typeid(*shapeB) == typeid(CollisionCircle))
 			return DetectCircleCircleCollision(shapeA, shapeB, _a, _b);
-		else if(typeid(*shapeA) == typeid(CollisionRectangle) && typeid(*shapeA) == typeid(*shapeB))
+		else if(typeid(*shapeA) == typeid(CollisionRectangle) && typeid(*shapeB) == typeid(CollisionRectangle))
 			return DetectRectangleRectangleCollision(shapeA, shapeB, _a, _b);
 		else if(typeid(*shapeA) == typeid(CollisionRectangle) && typeid(CollisionCircle) == typeid(*shapeB))
+			return DetectCircleRectangleCollision(shapeA, shapeB, _a, _b);
+		else if(typeid(*shapeA) == typeid(CollisionCircle) && typeid(CollisionRectangle) == typeid(*shapeB))
 			return DetectCircleRectangleCollision(shapeB, shapeA, _b, _a);
 		else
 		{
@@ -137,7 +140,14 @@
 			res.collided = true;
 			res.depth = distance;
 			Vector2 normal(dx,dy);
-			normal = Vector2::Normalize(normal);
+			if(distance == 0)
+			{
+				normal = Vector2(0,1);
+			}
+			else{
+				normal = Vector2::Normalize(normal);
+			}
+			
 			res.normal = normal;
 			res.overlap = circ->GetRadius() - distance;
 		}
@@ -240,7 +250,7 @@
 		return res;
 	}
 
-	void RigidBody::ResolveCollision(RigidBody _a, RigidBody _b)
+	void RigidBody::ResolveCollision(RigidBody &_a, RigidBody &_b)
 	{
 		CollisionResult res = DetectCollision(_a, _b);
 		
@@ -252,7 +262,12 @@
 		else if (res.type == RECTANGLE_RECTANGLE)
 			ResolveRectangleRectangleCollision(res, _a, _b);
 		else if (res.type == CIRCLE_RECTANGLE)
-			ResolveCircleRectangleCollision(res, _a, _b);
+		{
+			if(typeid(*_a.GetColShape()) == typeid(CollisionCircle))
+				ResolveCircleRectangleCollision(res, _a, _b);
+			else
+				ResolveCircleRectangleCollision(res, _b, _a);
+		}
 	}
 
 	void RigidBody::ResolveCircleCircleCollision(CollisionResult _res, RigidBody &_a, RigidBody &_b)
@@ -277,83 +292,57 @@
 
 	void RigidBody::ResolveRectangleRectangleCollision(CollisionResult _res, RigidBody &_a, RigidBody &_b)
 	{
-		
-		if(_b.GetMass() == -1)
-		{
-			Vector2 positionA = _a.GetPosition();
-			if(_res.overlapX < _res.overlapY)
-			{
-				if(_res.overlapX1 < _res.overlapX2)
-					positionA.SetX(positionA.GetX() - _res.overlapX1);
-				else
-					positionA.SetX(positionA.GetX() + _res.overlapX2);
-			}
-			else
-			{
-				if(_res.overlapY1 < _res.overlapY2)
-					positionA.SetY(positionA.GetY() - _res.overlapY1);
-				else
-					positionA.SetY(positionA.GetY() + _res.overlapY2);
-			}
-			_a.SetPosition(positionA);
-		}
-		else if(_a.GetMass() == -1)
-		{
-			Vector2 positionB = _b.GetPosition();
+		float moveX=0;
+		float moveY=0;
 
-			if(_res.overlapX < _res.overlapY)
-			{
-				if(_res.overlapX1 < _res.overlapX2)
-					positionB.SetX(positionB.GetX() + _res.overlapX1);
-				else
-					positionB.SetX(positionB.GetX() - _res.overlapX2);
-			}
+		if(_res.overlapX < _res.overlapY)
+		{
+			if(_a.GetPosition().GetX() < _b.GetPosition().GetX())
+				moveX = -1 * _res.overlapX; //we'll be moving a to the left
 			else
-			{
-				if(_res.overlapY1 < _res.overlapY2)
-					positionB.SetY(positionB.GetY() + _res.overlapY1);
-				else
-					positionB.SetY(positionB.GetY() - _res.overlapY2);
-			}
-			_b.SetPosition(positionB);
+				moveX = _res.overlapX; //move a to the right
 		}
 		else
 		{
-			Vector2 positionA = _a.GetPosition();
-			Vector2 positionB = _b.GetPosition();
-
-			if(_res.overlapX < _res.overlapY)
-			{
-				if(_res.overlapX1 < _res.overlapX2)
-				{
-					positionA.SetX(positionA.GetX() - (_res.overlapX1/2));
-					positionB.SetX(positionB.GetX() + (_res.overlapX1/2));
-				}
-				else
-				{
-					positionA.SetX(positionA.GetX() + (_res.overlapX2/2));
-					positionB.SetX(positionB.GetX() - (_res.overlapX2/2));
-				}
-			}
+			if(_a.GetPosition().GetY() < _b.GetPosition().GetY())
+				moveY = -1 * _res.overlapY; //move a down
 			else
-			{
-				if(_res.overlapY1 < _res.overlapY2)
-				{
-					positionA.SetY(positionA.GetY() - (_res.overlapY1/2));
-					positionB.SetY(positionB.GetY() + (_res.overlapY1/2));
-				}
-				else
-				{
-					positionA.SetY(positionA.GetY() + (_res.overlapY2/2));
-					positionB.SetY(positionB.GetY() - (_res.overlapY2/2));
-				}
-			}
+				moveY = _res.overlapY; //move a up
 		}
+
+		Vector2 move(moveX,moveY);
+
+		if(_a.GetMass() == -1)
+		{
+			Vector2 move = _b.GetPosition() - move;
+			_b.SetPosition(move);
+		}
+		else if(_b.GetMass() == -1)
+		{
+			Vector2 move = _a.GetPosition() + move;
+			_a.SetPosition(move);
+		}
+		else
+		{
+			move = move * 0.5f;
+			Vector2 moveA = _a.GetPosition() + move;
+
+			Vector2 moveB = _b.GetPosition() - move;
+
+			_a.SetPosition(moveA);
+			_b.SetPosition(moveB);
+		}
+
+		
+		
 	}
 
 	void RigidBody::ResolveCircleRectangleCollision(CollisionResult _res, RigidBody &_circle, RigidBody &_rect)
 	{
-		Vector2 normal = _res.normal;	
+		
+
+		//std::cout<<"\n normal vector is ()"<<_res.normal.GetX()<<", "<<_res.normal.GetY()<<")\n";
+		
 
 		if(_circle.GetMass() == -1)
 		{
@@ -387,8 +376,5 @@
 
 			_circle.SetPosition(pos);
 		}
-
-
-
 		
 	}

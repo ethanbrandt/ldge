@@ -61,5 +61,5 @@ public:
     void SetMass(float _mass);
     void SetShape(CollisionShape* _colShape);
 	static CollisionResult DetectCollision(RigidBody _a, RigidBody _b);
-	static void ResolveCollision(RigidBody _a, RigidBody _b);
+	static void ResolveCollision(RigidBody &_a, RigidBody &_b);
 };
