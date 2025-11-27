@@ -1,0 +1,5 @@
+{
+	"audioFilePath" : "assets/game_sword.wav",
+	"startVolume" : 0.5,
+	"isLooping" : false
+}

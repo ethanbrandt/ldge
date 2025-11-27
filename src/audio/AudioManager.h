@@ -14,6 +14,7 @@ private:
 	SDL_AudioStream* stream;
 	SDL_AudioDeviceID* audio_device_id;
 	SDL_AudioSpec spec;
+	float startVolume;
 
 public:
 	bool isLooping = false;
@@ -23,15 +24,17 @@ public:
 		this->audio_device_id = audio_device_id;
 	}
 
-	bool LoadSound(std::string filepath)
+	bool LoadSound(std::string _filepath, float _startVolume)
 	{
 		/*
 		Loads the audio file then it creates the audio file object
 		*/
 
+		startVolume = _startVolume;
+
 		char* wav_path = NULL;
 		
-		SDL_asprintf(&wav_path, "%s%s", SDL_GetBasePath(), filepath.c_str());
+		SDL_asprintf(&wav_path, "%s%s", SDL_GetBasePath(), _filepath.c_str());
 		if (!SDL_LoadWAV(wav_path, &spec, &this->wav_data, &this->wav_data_len))
 		{
 			std::cout << "\nCouldn't load .wav file: %s";
@@ -49,6 +52,8 @@ public:
 		else if (!SDL_BindAudioStream(*this->audio_device_id, this->stream)) {  /* once bound, it'll start playing when there is data available! */
 			sprintf_s(buffer, "\nFailed to bind stream to device: %s", SDL_GetError());
 		}
+
+		SetVolume(1.0f);
 
 		return true;
 	}
@@ -93,7 +98,7 @@ public:
 		/*
 		Takes in a float between 0(silence) and 1(loudest) and set's the volume.
 		*/
-		SDL_SetAudioStreamGain(this->stream, volume);
+		SDL_SetAudioStreamGain(this->stream, volume * startVolume);
 	}
 
 	void DestroyAudioStream()
@@ -144,32 +149,32 @@ class AudioManager
     		this->DeleteAllSounds();
 		}
 
-		AudioStream* CreateAudioStream(std::string filepath)
+		AudioStream* CreateAudioStream(std::string _filepath, float _startVolume)
 		{
 			/*
 			instantiates the audio stream, binds it into the audio device, returns the object to be used
 			*/
 			AudioStream* audio_stream_object;
 			audio_stream_object =  new AudioStream(&this->audio_device);
-			audio_stream_object->LoadSound(filepath);
+			audio_stream_object->LoadSound(_filepath, _startVolume);
 			return audio_stream_object;
 		}
 
-		void AddSong(std::string filename)
+		void AddSong(std::string filename, float _startVolume = 1.0f)
 		{
 			/*
 			Adds a song to the vector for continuous playback, to be called on every frame
 			*/
-			loopingSounds.insert({filename, CreateAudioStream(filename)});
+			loopingSounds.insert({filename, CreateAudioStream(filename, _startVolume)});
 			loopingSounds[filename]->isLooping = true;
 		}
 
-		void AddSound(std::string filename)
+		void AddSound(std::string filename, float _startVolume = 1.0f)
 		{
 			/*
 			Adds a song to the vector for continuous playback, to be called on every frame
 			*/
-			nonLoopingSounds.insert({ filename, CreateAudioStream(filename)});
+			nonLoopingSounds.insert({ filename, CreateAudioStream(filename, _startVolume)});
 			nonLoopingSounds[filename]->isLooping = false;
 		}
 

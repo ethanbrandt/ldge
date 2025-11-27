@@ -1,0 +1,7 @@
+{
+	"fontAtlasFilePath" : "assets/bytesized-mono.bmp",
+	"fontAtlasOrder" : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:?!",
+	"charWidth" : 4,
+	"charHeight" : 4,
+	"horizontalPadding" : 0
+}
