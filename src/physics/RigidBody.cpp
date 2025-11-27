@@ -2,7 +2,6 @@
 	#include <typeinfo>
 	#include <cmath>
 	#include <algorithm>
-	#include <iostream>
 
 	RigidBody::RigidBody()
 	{
@@ -13,14 +12,16 @@
 		position = newPosition;
 		velocity = newVelocity;
 		mass = newMass;
+		isStatic = false;
 	}
 
-	RigidBody::RigidBody(Vector2 _position, Vector2 _velocity, float _mass, CollisionShape* _colShape)
+	RigidBody::RigidBody(Vector2 _position, Vector2 _velocity, float _mass, CollisionShape* _colShape, bool _isStatic)
 	{
 		position = _position;
 		velocity = _velocity;
 		mass = _mass;
 		colShape = _colShape;
+		isStatic = _isStatic;
 	}
 
 	Vector2 RigidBody::GetPosition()
@@ -41,6 +42,11 @@
 	CollisionShape* RigidBody::GetColShape()
 	{
 		return colShape;
+	}
+
+	bool RigidBody::IsStatic()
+	{
+		return isStatic;
 	}
 
 	void RigidBody::SetPosition(Vector2 _pos)
@@ -279,10 +285,18 @@
 		Vector2 changeA = normal * -1 * (depth / 2);
 		Vector2 changeB = normal * (depth / 2);
 
-		if (_a.GetMass() == -1)
-			_b.SetPosition(aPos + changeA + changeA);
-		else if (_b.GetMass() == -1)
-			_a.SetPosition(aPos + changeB + changeB);
+		if (_a.IsStatic())
+		{
+			Vector2 change = normal * depth;
+			Vector2 move = bPos + change;
+			_b.SetPosition((move));
+		}
+		else if (_b.IsStatic())
+		{
+			Vector2 change = normal * depth * -1;
+			Vector2 move = aPos + change;
+			_a.SetPosition((move));
+		}
 		else
 		{
 			_a.SetPosition(aPos + changeA);
@@ -312,23 +326,22 @@
 
 		Vector2 move(moveX,moveY);
 
-		if(_a.GetMass() == -1)
+		if(_a.IsStatic())
 		{
-			std::cout << move.GetX() << ", " << move.GetY() << std::endl;
-			Vector2 move = _b.GetPosition() - move;
+			Vector2 test = _b.GetPosition() - move;
+			Vector2 move = test;
 			_b.SetPosition(move);
 		}
-		else if(_b.GetMass() == -1)
+		else if(_b.IsStatic())
 		{
-			std::cout << move.GetX() << ", " << move.GetY() << std::endl;
 			Vector2 test = _a.GetPosition() + move;
 			Vector2 move = test;
-			std::cout << test.GetX() << ", " << test.GetY() << std::endl;
 			_a.SetPosition(move);
 		}
 		else
 		{
-			move = move * 0.5f;
+			Vector2 test = move * 0.5f;
+			move = test;
 			Vector2 moveA = _a.GetPosition() + move;
 
 			Vector2 moveB = _b.GetPosition() - move;
@@ -345,10 +358,7 @@
 	{
 		
 
-		//std::cout<<"\n normal vector is ()"<<_res.normal.GetX()<<", "<<_res.normal.GetY()<<")\n";
-		
-
-		if(_circle.GetMass() == -1)
+		if(_circle.IsStatic())
 		{
 			Vector2 move = -1 * _res.normal * _res.overlap;
 			Vector2 rectPos = _rect.GetPosition();
@@ -356,7 +366,7 @@
 
 			_rect.SetPosition(pos);
 		}
-		else if(_rect.GetMass() == -1)
+		else if(_rect.IsStatic())
 		{
 			Vector2 move = _res.normal * _res.overlap;
 			Vector2 circPos = _circle.GetPosition();
