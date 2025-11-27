@@ -175,17 +175,17 @@
 
 		Vector2 b1, b2, b3, b4; // vertices of rectangle B
 
-		b1.SetX(centerB.GetX() - (rectA->GetLength() / 2));
-		b1.SetY(centerB.GetY() + (rectA->GetWidth() / 2));
+		b1.SetX(centerB.GetX() - (rectB->GetLength() / 2));
+		b1.SetY(centerB.GetY() + (rectB->GetWidth() / 2));
 
-		b2.SetX(centerB.GetX() + (rectA->GetLength() / 2));
-		b2.SetY(centerB.GetY() + (rectA->GetWidth() / 2));
+		b2.SetX(centerB.GetX() + (rectB->GetLength() / 2));
+		b2.SetY(centerB.GetY() + (rectB->GetWidth() / 2));
 
-		b3.SetX(centerB.GetX() + (rectA->GetLength() / 2));
-		b3.SetY(centerB.GetY() - (rectA->GetWidth() / 2));
+		b3.SetX(centerB.GetX() + (rectB->GetLength() / 2));
+		b3.SetY(centerB.GetY() - (rectB->GetWidth() / 2));
 
-		b4.SetX(centerB.GetX() - (rectA->GetLength() / 2));
-		b4.SetY(centerB.GetY() - (rectA->GetWidth() / 2));
+		b4.SetX(centerB.GetX() - (rectB->GetLength() / 2));
+		b4.SetY(centerB.GetY() - (rectB->GetWidth() / 2));
 
 		if (!(a2.GetX() < b1.GetX() || a1.GetX() > b2.GetX() || a3.GetY() > b2.GetY() || a1.GetY() < b4.GetY())) // checks to see if they overlap
 		{
@@ -278,7 +278,7 @@
 	void RigidBody::ResolveRectangleRectangleCollision(CollisionResult _res, RigidBody &_a, RigidBody &_b)
 	{
 		
-		if(_a.GetMass() == -1)
+		if(_b.GetMass() == -1)
 		{
 			Vector2 positionA = _a.GetPosition();
 			if(_res.overlapX < _res.overlapY)
@@ -297,7 +297,7 @@
 			}
 			_a.SetPosition(positionA);
 		}
-		else if(_b.GetMass() == -1)
+		else if(_a.GetMass() == -1)
 		{
 			Vector2 positionB = _b.GetPosition();
 
