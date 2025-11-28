@@ -222,8 +222,8 @@ int main()
         cout<<test<<"\n";
     }
 
-    CollisionCircle* shapeC = new CollisionCircle(5, Vector2(0,0), false, 0);
-    CollisionCircle* shapeD = new CollisionCircle(5, Vector2(0,0), false, 0);
+    CollisionCircle* shapeC = new CollisionCircle(5, Vector2(0,0), false, 1);
+    CollisionCircle* shapeD = new CollisionCircle(5, Vector2(0,0), false, 1);
     RigidBody c(Vector2(0,0), Vector2(0,0), 1, shapeC, false);
     RigidBody d(Vector2(1,1), Vector2(0,0), 1, shapeD, false);
 
@@ -282,8 +282,8 @@ int main()
         cout<<test<<"\n";
     }
 
-    CollisionRectangle* shapeE = new CollisionRectangle(5, 5, Vector2(0,0), false, 0);
-    CollisionRectangle* shapeF = new CollisionRectangle(5, 5, Vector2(0,0), false, 0);
+    CollisionRectangle* shapeE = new CollisionRectangle(5, 5, Vector2(0,0), false, 1);
+    CollisionRectangle* shapeF = new CollisionRectangle(5, 5, Vector2(0,0), false, 1);
     RigidBody e(Vector2(0,0), Vector2(0,0), 1, shapeE, false);
     RigidBody f(Vector2(0,1), Vector2(0,0), 1, shapeF, false);
 
@@ -347,8 +347,8 @@ int main()
         cout<<test<<"\n";
     }
 
-    CollisionCircle* shapeG = new CollisionCircle(5, Vector2(0,0), false, 0);
-    CollisionRectangle* shapeH = new CollisionRectangle(5, 5, Vector2(0,0), false, 0);
+    CollisionCircle* shapeG = new CollisionCircle(5, Vector2(0,0), false, 1);
+    CollisionRectangle* shapeH = new CollisionRectangle(5, 5, Vector2(0,0), false, 1);
     RigidBody g(Vector2(0,0), Vector2(0,0), 1, shapeE, false);
     RigidBody h(Vector2(0,3), Vector2(0,0), -1, shapeF, false);
 
@@ -440,9 +440,9 @@ int main()
 
 
     CollisionCircle* shapeP = new CollisionCircle(5, Vector2(0,0), false, 1);
-    CollisionRectangle* shapeA = new CollisionRectangle(5, 5, Vector2(0,0), false, 0);
-    RigidBody p(Vector2(0,0), Vector2(0,0), 1, shapeE, false);
-    RigidBody q(Vector2(0,3), Vector2(0,0), 1, shapeF, true);
+    CollisionRectangle* shapeQ = new CollisionRectangle(5, 5, Vector2(0,0), false, 0);
+    RigidBody p(Vector2(0,0), Vector2(0,0), 1, shapeP, false);
+    RigidBody q(Vector2(0,3), Vector2(0,0), 1, shapeQ, true);
 
 
     RigidBody::ResolveCollision(p,q);
