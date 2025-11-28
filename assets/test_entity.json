@@ -2,6 +2,7 @@
 	"scriptFilePath" : "scripts/test_script.lua",
 	"rigidBody" : {
 		"mass" : 1,
+		"isStatic" : false,
 		"collisionCircle" : {
 			"radius" : 2,
 			"offset" : [0, 0],

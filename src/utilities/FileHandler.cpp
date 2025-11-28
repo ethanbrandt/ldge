@@ -177,12 +177,16 @@ RigidBody* FileHandler::LoadRigidbody(json entityData, std::string& filePath, bo
 {
 	std::string currentKey = "rigidBody";
 	float mass = 1;
+	bool isStatic = false;
 	CollisionShape* colShape;	
 	
 	if (entityData.contains(currentKey))
 	{
 		if (entityData[currentKey].contains("mass"))
 			mass = entityData[currentKey]["mass"].get<float>();
+
+		if (entityData[currentKey].contains("isStatic"))
+			isStatic = entityData[currentKey]["isStatic"].get<bool>();
 
 		Vector2 offset(0, 0);
 		bool isTrigger = false;
@@ -264,7 +268,7 @@ RigidBody* FileHandler::LoadRigidbody(json entityData, std::string& filePath, bo
 		errorFlag = true;
 	}
 
-	return new RigidBody(Vector2(0,0), Vector2(0,0), mass, colShape);
+	return new RigidBody(Vector2(0,0), Vector2(0,0), mass, colShape, isStatic);
 }
 
 Actor* FileHandler::LoadActor(json entityData, std::string& filePath, bool& errorFlag)

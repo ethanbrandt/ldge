@@ -2,6 +2,7 @@
 	"scriptFilePath" : "scripts/test_script.lua",
 	"rigidBody" : {
 		"mass" : 1,
+		"isStatic" : true,
 		"collisionRectangle" : {
 			"width" : 2,
 			"height" : 3.5,

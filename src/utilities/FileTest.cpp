@@ -62,6 +62,7 @@ int main()
 	std::cout << entityFilePath << " pos: " << record.pos.GetX() << ", " << record.pos.GetY() << std::endl;
 
 	std::cout << entityFilePath << " rb mass: " << record.rigidBody->GetMass() << std::endl;
+	std::cout << entityFilePath << " rb isStatic: " << record.rigidBody->IsStatic() << std::endl;
 	std::cout << entityFilePath << " rb colShape offset: " << record.rigidBody->GetColShape()->GetOffset().GetX() << ", " << record.rigidBody->GetColShape()->GetOffset().GetY() << std::endl;
 	std::cout << entityFilePath << " rb colShape isTrigger: " << record.rigidBody->GetColShape()->IsTrigger() << std::endl;
 	std::cout << entityFilePath << " rb colShape colMask: " << record.rigidBody->GetColShape()->GetColMask() << std::endl;
