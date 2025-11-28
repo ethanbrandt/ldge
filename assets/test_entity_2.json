@@ -1,0 +1,20 @@
+{
+	"scriptFilePath" : "scripts/test_script.lua",
+	"rigidBody" : {
+		"mass" : 1,
+		"collisionRectangle" : {
+			"width" : 2,
+			"height" : 3.5,
+			"offset" : [0, 0],
+			"isTrigger" : false,
+			"collisionMask" : 0
+		}
+	},
+	"spriteSheet" : {
+		"spriteFilePath" : "assets/sshot0002.bmp",
+		"spriteWidth" : 32,
+		"spriteHeight" : 64,
+		"startSpriteIndex" : [0, 0],
+		"scale" : [2, 1]
+	}
+}

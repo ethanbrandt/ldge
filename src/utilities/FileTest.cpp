@@ -3,11 +3,13 @@
 #include <string>
 #include <thread>
 #include <chrono>
+#include <typeinfo>
 
 #include "FileHandler.h"
 #include "../rendering/RenderManager.h"
 #include "../rendering/UIElement.h"
 #include "../audio/AudioManager.h"
+#include "../gorm/ScriptManager.h"
 
 int main()
 {
@@ -23,11 +25,12 @@ int main()
     
 	AudioManager audioManager;
 	RenderManager renderManager(renderer);
+	ScriptManager scriptManager;
 
 	std::string songFilePath = "assets/game_music.json";
 	std::string sfxFilePath = "assets/game_sword.json";
 
-	FileHandler fileHandler(&renderManager, &audioManager);
+	FileHandler fileHandler(&renderManager, &audioManager, &scriptManager);
 
 	fileHandler.LoadAudioFromFile(songFilePath);
 	fileHandler.LoadAudioFromFile(sfxFilePath);
@@ -45,6 +48,43 @@ int main()
 
 	renderManager.RegisterUIElement(&uiText);
 	renderManager.SetUITextFont(uiText, "assets/bytesized-mono.bmp");
+
+	std::string entityFilePath = "assets/test_entity.json";
+	EntityId id = fileHandler.LoadEntityFromFile(entityFilePath);
+	if (id == -1)
+	{
+		std::cerr << "fileHandler Error" << std::endl;
+		return 0;
+	}	
+	
+	EntityRecord record = scriptManager.GetEntityRecord(id);
+
+	std::cout << entityFilePath << " pos: " << record.pos.GetX() << ", " << record.pos.GetY() << std::endl;
+
+	std::cout << entityFilePath << " rb mass: " << record.rigidBody->GetMass() << std::endl;
+	std::cout << entityFilePath << " rb colShape offset: " << record.rigidBody->GetColShape()->GetOffset().GetX() << ", " << record.rigidBody->GetColShape()->GetOffset().GetY() << std::endl;
+	std::cout << entityFilePath << " rb colShape isTrigger: " << record.rigidBody->GetColShape()->IsTrigger() << std::endl;
+	std::cout << entityFilePath << " rb colShape colMask: " << record.rigidBody->GetColShape()->GetColMask() << std::endl;
+
+	if (typeid(*record.rigidBody->GetColShape()) == typeid(CollisionCircle))
+	{
+		CollisionCircle* colCircle = (CollisionCircle*)record.rigidBody->GetColShape();
+
+		std::cout << entityFilePath << " rb colCircle radius: " << colCircle->GetRadius() << std::endl;
+	}
+	else if (typeid(*record.rigidBody->GetColShape()) == typeid(CollisionRectangle))
+	{
+		CollisionRectangle* colRect = (CollisionRectangle*)record.rigidBody->GetColShape();
+		
+		std::cout << entityFilePath << " rb colRectangle width & height: " << colRect->GetWidth() << ", " << colRect->GetLength() << std::endl;
+	}
+	else
+	{
+		std::cerr << "invalid colShape type" << std::endl;
+		return 0;
+	}
+
+	renderManager.RegisterActor(record.actor);
 
 	while (true)
 	{

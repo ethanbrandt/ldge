@@ -119,6 +119,16 @@ public:
 		fontAssets[_fontAtlasFilePath] = fontAsset;
 	}
 
+	void SetActorSprite(Actor* _actor, std::string& _spriteFilePath)
+	{
+		_actor->LoadSprite(renderer, _spriteFilePath);
+	}
+
+	void SetActorSpriteSheet(Actor* _actor, std::string& _spriteFilePath, float _spriteWidth, float _spriteHeight)
+	{
+		_actor->LoadSpriteSheet(renderer, _spriteFilePath, _spriteWidth, _spriteHeight);
+	}
+
 	void LoadTileSet(const std::string& _tileMapPath, int _tileSize)
 	{
 		tileRenderer->CreateTileTextures(renderer, _tileMapPath, _tileSize);

@@ -1,0 +1,16 @@
+{
+	"scriptFilePath" : "scripts/test_script.lua",
+	"rigidBody" : {
+		"mass" : 1,
+		"collisionCircle" : {
+			"radius" : 2,
+			"offset" : [0, 0],
+			"isTrigger" : false,
+			"collisionMask" : 0
+		}
+	},
+	"sprite" : {
+		"spriteFilePath" : "assets/sshot0002.bmp",
+		"scale" : [0.5, 0.5]
+	}
+}
