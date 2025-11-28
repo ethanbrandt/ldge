@@ -85,6 +85,13 @@
 		CollisionShape* shapeA = _a.GetColShape();
 		CollisionShape* shapeB = _b.GetColShape();
 
+		if((shapeA->GetColMask() & shapeB->GetColMask()) == 0) //checks to see if they sheare a bit. If they don't then we're not moving them
+		{
+			CollisionResult res;
+			res.collided = false;
+			return res;
+		}
+
 		if(typeid(*shapeA) == typeid(CollisionCircle) && typeid(*shapeB) == typeid(CollisionCircle))
 			return DetectCircleCircleCollision(shapeA, shapeB, _a, _b);
 		else if(typeid(*shapeA) == typeid(CollisionRectangle) && typeid(*shapeB) == typeid(CollisionRectangle))

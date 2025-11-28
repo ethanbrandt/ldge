@@ -395,7 +395,7 @@ int main()
     }
 
     RigidBody k(Vector2(0,0), Vector2(0,0), 1, shapeE, true);
-    RigidBody l(Vector2(0,3), Vector2(0,0), -1, shapeF, false);
+    RigidBody l(Vector2(0,3), Vector2(0,0), 1, shapeF, false);
 
 
     RigidBody::ResolveCollision(k,l);
@@ -417,7 +417,7 @@ int main()
     }
 
     RigidBody m(Vector2(0,0), Vector2(0,0), 1, shapeE, false);
-    RigidBody n(Vector2(0,3), Vector2(0,0), -1, shapeF, true);
+    RigidBody n(Vector2(0,3), Vector2(0,0), 1, shapeF, true);
 
 
     RigidBody::ResolveCollision(m,n);
@@ -428,6 +428,31 @@ int main()
     distance = sqrt(pow(m.GetPosition().GetX() - n.GetPosition().GetX(),2) + pow(m.GetPosition().GetY() - n.GetPosition().GetY(),2));
     
     if(distance == 5)
+    {
+        test = true;
+        cout<<test<<" Circ-Rect collision pushed rectangles the appropriate distance (look above to see where they were pushed)\n";
+    }
+    else
+    {
+        test = false;
+        cout<<test<<"\n";
+    }
+
+
+    CollisionCircle* shapeP = new CollisionCircle(5, Vector2(0,0), false, 1);
+    CollisionRectangle* shapeA = new CollisionRectangle(5, 5, Vector2(0,0), false, 0);
+    RigidBody p(Vector2(0,0), Vector2(0,0), 1, shapeE, false);
+    RigidBody q(Vector2(0,3), Vector2(0,0), 1, shapeF, true);
+
+
+    RigidBody::ResolveCollision(p,q);
+    
+
+    cout<<"p was pushed to "<<m.GetPosition().GetX()<<" "<<p.GetPosition().GetY()<<"\n";
+    cout<<"q was pushed to "<<n.GetPosition().GetX()<<" "<<q.GetPosition().GetY()<<"\n";
+    distance = sqrt(pow(p.GetPosition().GetX() - q.GetPosition().GetX(),2) + pow(p.GetPosition().GetY() - q.GetPosition().GetY(),2));
+    
+    if(distance == 3)
     {
         test = true;
         cout<<test<<" Circ-Rect collision pushed rectangles the appropriate distance (look above to see where they were pushed)\n";
