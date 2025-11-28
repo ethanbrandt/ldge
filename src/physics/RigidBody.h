@@ -40,6 +40,7 @@ private:
     Vector2 velocity;
     float mass;
     CollisionShape* colShape;
+    bool isStatic;
 
 	static CollisionResult DetectCircleCircleCollision(CollisionShape* _shapeA, CollisionShape* _shapeB, RigidBody& _a, RigidBody& _b);
 	static CollisionResult DetectRectangleRectangleCollision(CollisionShape *shapeA, CollisionShape *shapeB, RigidBody &_a, RigidBody &_b);
@@ -51,15 +52,16 @@ private:
 	
 public:
     RigidBody();
-    RigidBody(Vector2 _pos, Vector2 _vel, float _mass, CollisionShape* _colShape);
+    RigidBody(Vector2 _pos, Vector2 _vel, float _mass, CollisionShape* _colShape, bool _isStatic);
     Vector2 GetPosition();
     Vector2 GetVelocity();
     float GetMass();
     CollisionShape* GetColShape();
+    bool IsStatic();
     void SetPosition(Vector2 _pos);
     void SetVelocity(Vector2 _vel);
     void SetMass(float _mass);
     void SetShape(CollisionShape* _colShape);
 	static CollisionResult DetectCollision(RigidBody _a, RigidBody _b);
-	static void ResolveCollision(RigidBody _a, RigidBody _b);
+	static void ResolveCollision(RigidBody &_a, RigidBody &_b);
 };
