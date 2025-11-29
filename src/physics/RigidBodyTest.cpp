@@ -455,13 +455,85 @@ int main()
     if(distance == 3)
     {
         test = true;
-        cout<<test<<" Circ-Rect collision pushed rectangles the appropriate distance (look above to see where they were pushed)\n";
+        cout<<test<<" Circ-Rect collision pushed rectangles the appropriate distance (look above to see where they were pushed last test)\n";
     }
     else
     {
         test = false;
         cout<<test<<"\n";
     }
+
+    
+    CollisionCircle* circle1 = new CollisionCircle(5, Vector2(0,0), true, 1);
+    CollisionRectangle* rectangle1 = new CollisionRectangle(5, 5, Vector2(0,0), false, 1);
+    CollisionRectangle* rectangle2 = new CollisionRectangle(3, 3, Vector2(0,0), false, 0);
+
+    RigidBody body1(Vector2(0,3), Vector2(0,0), 1, circle1, true);
+    RigidBody body2(Vector2(2,0), Vector2(0,0), 1, rectangle1, false);
+    RigidBody body3(Vector2(0,3), Vector2(0,0), 1, rectangle2, false);
+
+    std::vector <RigidBody> bodies = {body1, body2, body3};
+
+    std::vector <RigidBody> BodyTriggers = RigidBody::DetectTrigger(bodies);
+    std::vector <RigidBody> BodyCollides = RigidBody::ReturnCollisions(bodies);
+    RigidBody::ResolveAllCollisions(bodies);
+
+    for(int i=0; i<bodies.size()-1; i++)
+    {
+        cout<<1<<" of pair "<<i<<" was pushed to "<<bodies[i].GetPosition().GetX()<<" "<<bodies[i].GetPosition().GetY()<<"\n";
+        cout<<2<<" of pair "<<i<<" was pushed to "<<bodies[i+1].GetPosition().GetX()<<" "<<bodies[i+1].GetPosition().GetY()<<"\n";
+        distance = sqrt(pow(bodies[i].GetPosition().GetX() - bodies[i+1].GetPosition().GetX(),2) + pow(bodies[i].GetPosition().GetY() - bodies[i+1].GetPosition().GetY(),2));
+        cout<<distance<<"\n";
+
+    }
+
+    if(BodyCollides[0].GetColShape() == circle1)
+    {
+        test = true;
+        cout<<test<<"\n";
+    }
+    else
+    {
+        test = false;
+        cout<<test<<"\n";
+    }
+
+    if(BodyCollides[1].GetColShape() == rectangle1)
+    {
+        test = true;
+        cout<<test<<"\n";
+    }
+    else
+    {
+        test = false;
+        cout<<test<<"\n";
+    }
+
+
+    
+    if(BodyTriggers[0].GetColShape() == rectangle1)
+    {
+        test = true;
+        cout<<test<<"\n";
+    }
+    else
+    {
+        test = false;
+        cout<<test<<"\n";
+    }
+    
+    if(BodyTriggers[1].GetColShape() == circle1)
+    {
+        test = true;
+        cout<<test<<"\n";
+    }
+    else
+    {
+        test = false;
+        cout<<test<<"\n";
+    }
+
+
 
 
     delete shapeC;

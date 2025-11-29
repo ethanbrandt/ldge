@@ -65,5 +65,7 @@ public:
     void SetShape(CollisionShape* _colShape);
 	static CollisionResult DetectCollision(RigidBody _a, RigidBody _b);
 	static void ResolveCollision(RigidBody &_a, RigidBody &_b);
-    static void ResolveAllCollisions(std::vector <RigidBody> bodies);
+    static void ResolveAllCollisions(std::vector <RigidBody>& bodies);
+    static std::vector <RigidBody> DetectTrigger(std::vector <RigidBody>& bodies);
+    static std::vector <RigidBody> ReturnCollisions(std::vector <RigidBody>& bodies);
 };
