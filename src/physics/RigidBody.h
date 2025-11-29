@@ -3,6 +3,7 @@
 #include "CollisionShape.h"
 #include "CollisionCircle.h"
 #include "CollisionRectangle.h"
+#include <vector>
 
 enum CollisionType
 {
@@ -64,4 +65,5 @@ public:
     void SetShape(CollisionShape* _colShape);
 	static CollisionResult DetectCollision(RigidBody _a, RigidBody _b);
 	static void ResolveCollision(RigidBody &_a, RigidBody &_b);
+    static void ResolveAllCollisions(std::vector <RigidBody> bodies);
 };
