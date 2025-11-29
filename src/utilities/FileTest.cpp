@@ -6,15 +6,23 @@
 #include <typeinfo>
 
 #include "FileHandler.h"
+#include "../input/InputManager.h"
 #include "../rendering/RenderManager.h"
 #include "../rendering/UIElement.h"
 #include "../audio/AudioManager.h"
 #include "../gorm/ScriptManager.h"
 
+InputManager* InputManager::instance = nullptr;
+RenderManager* RenderManager::instance = nullptr;
+FileHandler* FileHandler::instance = nullptr;
+ScriptManager* ScriptManager::instance = nullptr;
+AudioManager* AudioManager::instance = nullptr;
+
 int main()
 {
     SDL_Window* window;
     SDL_Renderer* renderer;
+
 
     //intializes a window, specifically one that plays audio
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -26,16 +34,15 @@ int main()
 	AudioManager audioManager;
 	RenderManager renderManager(renderer);
 	ScriptManager scriptManager;
+	InputManager inputManager;
+	FileHandler fileHandler;
 
-	std::string songFilePath = "assets/game_music.json";
-	std::string sfxFilePath = "assets/game_sword.json";
+	//std::string songFilePath = "assets/game_music.json";
+	//std::string sfxFilePath = "assets/game_sword.json";
 
-	FileHandler fileHandler(&renderManager, &audioManager, &scriptManager);
+	//fileHandler.LoadAudioFromFile(songFilePath);
+	//fileHandler.LoadAudioFromFile(sfxFilePath);
 
-	fileHandler.LoadAudioFromFile(songFilePath);
-	fileHandler.LoadAudioFromFile(sfxFilePath);
-
-	audioManager.PlayAllSongs();
 
 	std::string fontFilePath = "assets/bytesized-mono.json";
 
@@ -49,7 +56,7 @@ int main()
 	renderManager.RegisterUIElement(&uiText);
 	renderManager.SetUITextFont(uiText, "assets/bytesized-mono.bmp");
 
-	std::string entityFilePath = "assets/test_entity.json";
+	std::string entityFilePath = "assets/test_entity_2.json";
 	EntityId id = fileHandler.LoadEntityFromFile(entityFilePath);
 	if (id == -1)
 	{
@@ -60,6 +67,8 @@ int main()
 	std::cout << "b4 start" << std::endl;
 	scriptManager.Start(id);
 	EntityRecord record = scriptManager.GetEntityRecord(id);
+	
+	audioManager.PlayAllSongs();
 
 	std::cout << entityFilePath << " pos: " << record.rigidBody->GetPosition().GetX() << ", " << record.rigidBody->GetPosition().GetY() << std::endl;
 
@@ -99,7 +108,15 @@ int main()
 				SDL_Quit();
 				return 0;
 			}
+
+			if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP)
+			{
+				inputManager.HandleInputEvent(&event);
+			}
 		}
+
+		scriptManager.Update(1.0f/60.0f);
+		inputManager.UpdateInput();
 		
 		int w, h;
 		SDL_GetWindowSize(window, &w, &h);

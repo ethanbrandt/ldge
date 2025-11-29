@@ -30,15 +30,12 @@ class FileHandler
 {
 private:
 	static FileHandler* instance;
-	RenderManager* renderManager;
-	AudioManager* audioManager;
-	ScriptManager* scriptManager;
 
 	RigidBody* LoadRigidbody(json _entityData, std::string& _filePath, bool& _errorFlag);
 	Actor* LoadActor(json _entityData, std::string& _filePath, bool& _errorFlag);
 
 public:
-	FileHandler(RenderManager* _renderManager, AudioManager* _audioManager, ScriptManager* _scriptManager);
+	FileHandler();
 
 	void LoadAudioFromFile(std::string _filePath);
 	void LoadFontFromFile(std::string _filePath);

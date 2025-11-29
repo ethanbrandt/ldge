@@ -1,2 +1,2 @@
 project-lua-test: src/main.cpp
-	g++ -o lua-test.exe src/main.cpp -Iinclude -Llib -ISDL3-3.2.22/x86_64-w64-mingw32/include -LSDL3-3.2.22/x86_64-w64-mingw32/lib -llua -lSDL3
+	g++ .\src\main.cpp .\src\utilities\FileHandler.cpp .\src\physics\RigidBody.cpp .\src\physics\CollisionShape.cpp .\src\physics\CollisionCircle.cpp .\src\physics\CollisionRectangle.cpp .\src\utilities\Vector2.cpp .\src\gorm\ScriptManager.cpp -Iinclude -Llib -ISDL3-3.2.22\x86_64-w64-mingw32\include -LSDL3-3.2.22\x86_64-w64-mingw32\lib -lSDL3 -llua -o FileTest.exe

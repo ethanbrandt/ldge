@@ -8,9 +8,39 @@ function start(e)
 	xPos, yPos = GetPosition(e)
 	Log(tostring(e).." pos: "..tostring(xPos)..", "..tostring(yPos))
 
-	local xVel, yVel = GetVelocity(e)
-	Log(tostring(e).." vel: "..tostring(xVel)..", "..tostring(yVel))
-	SetVelocity(e, 2.1, 9.78)
-	xVel, yVel = GetVelocity(e)
-	Log(tostring(e).." vel: "..tostring(xVel)..", "..tostring(yVel))
+	SetSprite(e, "assets/lettuce.bmp")
+
+	LoadAudioFromFile("assets/game_sword.json")
+	LoadAudioFromFile("assets/game_music.json")
+end
+
+function update(e, dt)
+	local aPressed = IsPressed("A")
+	local sPressed = IsPressed("S")
+	local dPressed = IsPressed("D")
+	local wPressed = IsPressed("W")
+
+	local moveSpeed = 64
+	local xVel = 0
+	local yVel = 0
+
+
+	if aPressed then
+		Log("IsPressed(\'A\'): "..tostring(aPressed))
+		xVel = -moveSpeed
+	end
+	if sPressed then
+		Log("IsPressed(\'S\'): "..tostring(sPressed))
+		yVel = -moveSpeed
+	end
+	if dPressed then
+		Log("IsPressed(\'D\'): "..tostring(dPressed))
+		xVel = moveSpeed	
+	end
+	if wPressed then
+		Log("IsPressed(\'W\'): "..tostring(wPressed))
+		yVel = moveSpeed	
+	end
+
+	SetVelocity(e, xVel, yVel)
 end

@@ -400,69 +400,33 @@
 		
 	}
 
-void RigidBody::ResolveAllCollisions(std::vector <RigidBody>& bodies)
+void RigidBody::ResolveAllCollisions(std::vector <RigidBody*>& bodies)
 {
 	for(int i=0; i<bodies.size(); i++)
 	{
 		for(int j=i+1; j<bodies.size(); j++)
 		{
-			ResolveCollision(bodies[i], bodies[j]);
+			ResolveCollision(*bodies[i], *bodies[j]);
 		}
 	}
 }
 
-std::vector <RigidBody> RigidBody::DetectTrigger(std::vector <RigidBody>& bodies)
-{
-	CollisionResult res;
-	std::vector <RigidBody> BodyPair;	
-
-
-	for(int i=0; i<bodies.size(); i++)
-	{
-		for(int j=i+1; j<bodies.size(); j++)
-		{
-			res = DetectCollision(bodies[i], bodies[j]);
-			if(res.collided)
-			{
-				if(bodies[j].GetColShape()->IsTrigger())
-				{
-					BodyPair.push_back(bodies[i]);
-					BodyPair.push_back(bodies[j]);
-				}
-
-				else if(bodies[i].GetColShape()->IsTrigger())
-				{
-					BodyPair.push_back(bodies[j]);
-					BodyPair.push_back(bodies[i]);
-				}
-			}
-
-		}
-	}
-	return BodyPair; //the rigid body that stepped on trigger is on evens, the trigger is on odds
-}
-
-std::vector <RigidBody> RigidBody::ReturnCollisions(std::vector <RigidBody>& bodies)
+void RigidBody::ReturnTriggersAndCollisions(std::vector <RigidBody*>& bodies, std::vector<RigidBodyPair>& triggered, std::vector<RigidBodyPair>& collided)
 {
 	CollisionResult res;
-	std::vector <RigidBody> BodyPair;	
-
 
 	for(int i=0; i<bodies.size(); i++)
 	{
 		for(int j=i+1; j<bodies.size(); j++)
 		{
-			res = DetectCollision(bodies[i], bodies[j]);
-			if(res.collided)
-			{			
-				BodyPair.push_back(bodies[i]);
-				BodyPair.push_back(bodies[j]);
-			}
+			res = DetectCollision(*bodies[i], *bodies[j]);
+			if(!res.collided)
+				continue;
 
+			if(bodies[i]->GetColShape()->IsTrigger() || bodies[j]->GetColShape()->IsTrigger())
+				triggered.push_back(RigidBodyPair(bodies[i], bodies[j]));
+			else
+				collided.push_back(RigidBodyPair(bodies[i], bodies[j]));
 		}
 	}
-	return BodyPair;
 }
-
-
-

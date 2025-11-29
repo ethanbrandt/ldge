@@ -124,6 +124,8 @@ class AudioManager
 		std::map<std::string, AudioStream*> loopingSounds; //maybe use a map if we need to swap songs on the fly, can remove a song from the map and then add another
 		std::map<std::string, AudioStream*> nonLoopingSounds; //used for sounds that don't loop
 
+		static AudioManager* instance;
+
 	public:
 		AudioManager() //constructor
 		{
@@ -137,6 +139,7 @@ class AudioManager
 				sprintf_s(buffer, "\nFailed to audio device: %s", SDL_GetError());
 				std::cout << buffer << std::endl;
 			}
+			instance = this;
 		}
 
 		~AudioManager() //destructor
@@ -147,6 +150,11 @@ class AudioManager
 		{
 			this->DeleteAllSongs();
     		this->DeleteAllSounds();
+		}
+
+		static AudioManager* GetInstance()
+		{
+			return instance;
 		}
 
 		AudioStream* CreateAudioStream(std::string _filepath, float _startVolume)
@@ -252,6 +260,12 @@ class AudioManager
 				delete nonLoopingSounds[filename];
 				nonLoopingSounds.erase(filename);
 			}
+		}
+
+		void SetAudioVolume(std::string fileName, float volume)
+		{
+			SetSongVolume(fileName, volume);
+			SetSoundVolume(fileName, volume);
 		}
 
 		void SetSongVolume(std::string filename, float volume)

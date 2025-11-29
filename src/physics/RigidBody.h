@@ -34,6 +34,20 @@ struct CollisionResult
     CollisionType type;
 };
 
+class RigidBody;
+
+struct RigidBodyPair
+{
+	RigidBody* a;
+	RigidBody* b;
+
+	RigidBodyPair(RigidBody* _a, RigidBody* _b)
+	{
+		a = _a;
+		b = _b;
+	}
+};
+
 class RigidBody
 {
 private:
@@ -65,7 +79,6 @@ public:
     void SetShape(CollisionShape* _colShape);
 	static CollisionResult DetectCollision(RigidBody _a, RigidBody _b);
 	static void ResolveCollision(RigidBody &_a, RigidBody &_b);
-    static void ResolveAllCollisions(std::vector <RigidBody>& bodies);
-    static std::vector <RigidBody> DetectTrigger(std::vector <RigidBody>& bodies);
-    static std::vector <RigidBody> ReturnCollisions(std::vector <RigidBody>& bodies);
+    static void ResolveAllCollisions(std::vector <RigidBody*>& bodies);
+    static void ReturnTriggersAndCollisions(std::vector <RigidBody*>& bodies, std::vector<RigidBodyPair>& triggered, std::vector<RigidBodyPair>& collided);
 };

@@ -115,7 +115,7 @@ public:
 			return;
 		}
 
-		if (srcRect.w * _indexX >= srcRect.w || srcRect.h * _indexY >= srcRect.h)
+		if (srcRect.w * _indexX >= texture->w || srcRect.h * _indexY >= texture->h)
 		{
 			std::cerr << "Sprite index out of bounds" << std::endl;
 			return;

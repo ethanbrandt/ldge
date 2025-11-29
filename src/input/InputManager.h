@@ -69,7 +69,18 @@ class InputManager
 			z = SDLK_Z
 		};
 
+		static InputManager* instance;
+
 	public:
+		InputManager()
+		{
+			instance = this;
+		}
+
+		static InputManager* GetInstance()
+		{
+			return instance;
+		}
 
 		bool IsPressed(char letter)
 		{
@@ -79,7 +90,7 @@ class InputManager
 			* if in map, return most recent state of IsPressed bool
 			*/
 
-			SDL_Keycode key = KeyToKeyCode(letter);
+			SDL_Keycode key = KeyToKeyCode(tolower(letter));
 
 			if (keyboard.find(key) == keyboard.end())
 			{
@@ -96,7 +107,7 @@ class InputManager
 			* if not return false
 			* if in map, return most recent state of WasPressedDown bool
 			*/
-			SDL_Keycode key = KeyToKeyCode(letter);
+			SDL_Keycode key = KeyToKeyCode(tolower(letter));
 
 			if (keyboard.find(key) == keyboard.end())
 			{
@@ -112,7 +123,7 @@ class InputManager
 			* if not return false
 			* if in map, return most recent state of WasReleased bool
 			*/
-			SDL_Keycode key = KeyToKeyCode(letter);
+			SDL_Keycode key = KeyToKeyCode(tolower(letter));
 
 			if (keyboard.find(key) == keyboard.end())
 			{

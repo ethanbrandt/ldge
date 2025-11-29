@@ -16,13 +16,8 @@ using json = nlohmann::json;
 
 #include "FileHandler.h"
 
-FileHandler* FileHandler::instance = nullptr;
-
-FileHandler::FileHandler(RenderManager* _renderManager, AudioManager* _audioManager, ScriptManager* _scriptManager)
+FileHandler::FileHandler()
 {
-	renderManager = _renderManager;
-	audioManager = _audioManager;
-	scriptManager = _scriptManager;
 	instance = this;
 }
 
@@ -77,9 +72,9 @@ void FileHandler::LoadAudioFromFile(std::string _filePath)
 		return;
 
 	if (isLooping)
-		audioManager->AddSong(audioFilePath, startVolume);
+		AudioManager::GetInstance()->AddSong(audioFilePath, startVolume);
 	else
-		audioManager->AddSound(audioFilePath, startVolume);
+		AudioManager::GetInstance()->AddSound(audioFilePath, startVolume);
 }
 
 void FileHandler::LoadFontFromFile(std::string _filePath)
@@ -144,7 +139,7 @@ void FileHandler::LoadFontFromFile(std::string _filePath)
 	if (errorFlag)
 		return;
 	
-	renderManager->LoadFontAtlas(fontAtlasFilePath, fontAtlasOrder, charWidth, charHeight, horizontalPadding);
+	RenderManager::GetInstance()->LoadFontAtlas(fontAtlasFilePath, fontAtlasOrder, charWidth, charHeight, horizontalPadding);
 }
 
 
@@ -179,7 +174,7 @@ EntityId FileHandler::LoadEntityFromFile(std::string _filePath)
 		return -1;
 
 	rb->SetPosition(Vector2(0,0));
-	return scriptManager->CreateEntityRecord(scriptFilePath, actor, rb);
+	return ScriptManager::GetInstance()->CreateEntityRecord(scriptFilePath, actor, rb);
 }
 
 RigidBody* FileHandler::LoadRigidbody(json entityData, std::string& filePath, bool& errorFlag)
@@ -241,7 +236,7 @@ RigidBody* FileHandler::LoadRigidbody(json entityData, std::string& filePath, bo
 			}
 
 			if (entityData[currentKey]["collisionRectangle"].contains("height"))
-				width = entityData[currentKey]["collisionRectangle"]["height"].get<float>();
+				height = entityData[currentKey]["collisionRectangle"]["height"].get<float>();
 			else
 			{
 				std::cerr << filePath << " collisionRectangle must have height" << std::endl;
@@ -305,7 +300,7 @@ Actor* FileHandler::LoadActor(json entityData, std::string& filePath, bool& erro
 
 		if (!errorFlag)
 		{
-			renderManager->SetActorSprite(actor, spriteFilePath);
+			RenderManager::GetInstance()->SetActorSprite(actor, spriteFilePath);
 			actor->SetScale(spriteScale[0], spriteScale[1]);
 		}
 	}	
@@ -347,7 +342,7 @@ Actor* FileHandler::LoadActor(json entityData, std::string& filePath, bool& erro
 
 		if (!errorFlag)
 		{
-			renderManager->SetActorSpriteSheet(actor, spriteFilePath, spriteWidth, spriteHeight);
+			RenderManager::GetInstance()->SetActorSpriteSheet(actor, spriteFilePath, spriteWidth, spriteHeight);
 			actor->SetScale(spriteScale[0], spriteScale[1]);
 		}
 	}

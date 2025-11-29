@@ -17,6 +17,7 @@ struct FontAsset
 	int charHeight;
 };
 
+
 class RenderManager
 {
 private:
@@ -26,9 +27,12 @@ private:
 	TileRenderer* tileRenderer;
 	std::unordered_map<std::string, FontAsset> fontAssets;
 
+	static RenderManager* instance;
+
 public:
 	RenderManager(SDL_Renderer* _renderer)
 	{
+		instance = this;
 		renderer = _renderer;
 		tileRenderer = new TileRenderer();
 	}
@@ -44,6 +48,11 @@ public:
 		for (auto uiElement : uiElements)
 			delete uiElement;
 		uiElements.clear();
+	}
+
+	static RenderManager* GetInstance()
+	{
+		return instance;
 	}
 
 	void RegisterActor(Actor* _actor)
