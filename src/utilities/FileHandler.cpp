@@ -16,11 +16,19 @@ using json = nlohmann::json;
 
 #include "FileHandler.h"
 
+FileHandler* FileHandler::instance = nullptr;
+
 FileHandler::FileHandler(RenderManager* _renderManager, AudioManager* _audioManager, ScriptManager* _scriptManager)
 {
 	renderManager = _renderManager;
 	audioManager = _audioManager;
 	scriptManager = _scriptManager;
+	instance = this;
+}
+
+FileHandler* FileHandler::GetInstance()
+{
+	return instance;
 }
 
 // Load Audio File into AudioManager
@@ -58,7 +66,7 @@ void FileHandler::LoadAudioFromFile(std::string _filePath)
 	}
 
 	if (audioData.contains("isLooping"))
-		bool isLooping = audioData["isLooping"].get<bool>();
+		isLooping = audioData["isLooping"].get<bool>();
 	else
 	{
 		std::cerr << _filePath << " does not contain key: isLooping" << std::endl;
@@ -170,7 +178,8 @@ EntityId FileHandler::LoadEntityFromFile(std::string _filePath)
 	if (errorFlag)
 		return -1;
 
-	return scriptManager->CreateEntityRecord(Vector2(0,0), scriptFilePath, actor, rb);
+	rb->SetPosition(Vector2(0,0));
+	return scriptManager->CreateEntityRecord(scriptFilePath, actor, rb);
 }
 
 RigidBody* FileHandler::LoadRigidbody(json entityData, std::string& filePath, bool& errorFlag)

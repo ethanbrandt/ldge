@@ -56,10 +56,12 @@ int main()
 		std::cerr << "fileHandler Error" << std::endl;
 		return 0;
 	}	
-	
+
+	std::cout << "b4 start" << std::endl;
+	scriptManager.Start(id);
 	EntityRecord record = scriptManager.GetEntityRecord(id);
 
-	std::cout << entityFilePath << " pos: " << record.pos.GetX() << ", " << record.pos.GetY() << std::endl;
+	std::cout << entityFilePath << " pos: " << record.rigidBody->GetPosition().GetX() << ", " << record.rigidBody->GetPosition().GetY() << std::endl;
 
 	std::cout << entityFilePath << " rb mass: " << record.rigidBody->GetMass() << std::endl;
 	std::cout << entityFilePath << " rb isStatic: " << record.rigidBody->IsStatic() << std::endl;
@@ -86,7 +88,7 @@ int main()
 	}
 
 	renderManager.RegisterActor(record.actor);
-
+	
 	while (true)
 	{
 		SDL_Event event;

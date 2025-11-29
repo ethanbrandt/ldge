@@ -1,5 +1,5 @@
 {
 	"audioFilePath" : "assets/game_music.wav",
-	"startVolume" : 0.2,
+	"startVolume" : 0.5,
 	"isLooping" : true
 }

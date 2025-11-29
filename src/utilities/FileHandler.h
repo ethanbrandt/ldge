@@ -29,6 +29,7 @@ struct FontFile
 class FileHandler
 {
 private:
+	static FileHandler* instance;
 	RenderManager* renderManager;
 	AudioManager* audioManager;
 	ScriptManager* scriptManager;
@@ -45,4 +46,6 @@ public:
 	EntityId LoadEntityFromFile(std::string _filePath);
 	void LoadUILayoutFromFile(std::string _filePath); // TODO: WILL BE IMPLEMENTED WHEN FULL SYSTEM IS FURTHER IMPLEMENTED
 	void LoadSceneFromFile(std::string _filePath); // TODO: WILL BE IMPLEMENTED WHEN FULL SYSTEM IS FURTHER IMPLEMENTED
+
+	static FileHandler* GetInstance();
 };

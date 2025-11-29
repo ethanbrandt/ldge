@@ -16,11 +16,13 @@ struct Script
 	std::filesystem::file_time_type lastWrite;
 	int onStartRef = LUA_NOREF;
 	int onUpdateRef = LUA_NOREF;
+	int onTriggerRef = LUA_NOREF;
+	int onCollisionRef = LUA_NOREF;
+	int onDestroyRef = LUA_NOREF;
 };
 
 struct EntityRecord
 {
-	Vector2 pos;
 	Script script;
 	Actor* actor;
 	RigidBody* rigidBody;
@@ -33,13 +35,54 @@ private:
 	std::unordered_map<EntityId, EntityRecord> records;
 	EntityId nextEntityId;
 
+	static ScriptManager* instance;
+
+	void BindAPI();
+	void Load(EntityRecord& _record);
+
+	// Log Interfaces
+	static int l_Log(lua_State* _L);
+	static int l_LogError(lua_State* _L);
+
+	// FileHandler Interfaces
+	static int l_LoadAudioFromFile(lua_State* _L);
+	static int l_LoadFontFromFile(lua_State* _L);
+	static int l_LoadEntityFromFile(lua_State* _L);
+
+	// RigidBody Interfaces	
+	static int l_SetPosition(lua_State* _L);
+	static int l_GetPosition(lua_State* _L);
+	static int l_SetVelocity(lua_State* _L);
+	static int l_GetVelocity(lua_State* _L);
+
+	// Actor Interfaces
+	static int l_SetSprite(lua_State* _L);
+	static int l_SetSpriteSheet(lua_State* _L);
+	static int l_SetSpriteIndex(lua_State* _L);
+	static int l_SetScale(lua_State* _L);
+
+	// Audio Interfaces
+	static int l_PlaySound(lua_State* _L);
+	static int l_SetVolume(lua_State* _L);
+	static int l_PauseAllAudio(lua_State* _L);
+	static int l_ResumeAllAudio(lua_State* _L);
+
+	// Input Interfaces
+	static int l_isPressed(lua_State* _L);
+	static int l_wasPressedDown(lua_State* _L);
+	static int l_wasReleased(lua_State* _L);
+
 public:
 	ScriptManager();
 	~ScriptManager();
 
-	EntityId CreateEntityRecord(Vector2 _pos, std::string _scriptFilePath, Actor* _actor, RigidBody* _rigidBody);
-	EntityRecord GetEntityRecord(EntityId _entityId);
+	EntityId CreateEntityRecord(std::string _scriptFilePath, Actor* _actor, RigidBody* _rigidBody);
+	EntityRecord GetEntityRecord(EntityId _e);
+	void DestroyEntityRecord(EntityId _e);
 
-	void Start();
+	void Start(EntityId _e);
 	void Update(float _deltaTime);
+	void OnTrigger(EntityId _e, RigidBody& _other);
+	void OnCollision(EntityId _e, RigidBody& _other);
+	void OnDestroy(EntityId _e);
 };

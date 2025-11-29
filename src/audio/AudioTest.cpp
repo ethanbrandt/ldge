@@ -1,4 +1,4 @@
-#include "InputManager.h"
+#include "../input/InputManager.h"
 #include "AudioManager.h"
 
 #include <SDL3/SDL.h>
@@ -26,10 +26,10 @@ int main()
     SDL_CreateWindowAndRenderer("examples/audio/multiple-streams", 640, 480, SDL_WINDOW_RESIZABLE, &window, &renderer);  
     
     //adding a inputManager song
-    audioManager->AddSong("game_music.wav");
+    audioManager->AddSong("assets/game_music.wav");
     
     //adding a inputManager sound effect
-    audioManager->AddSound("game_sword.wav");
+    audioManager->AddSound("assets/game_sword.wav");
 
 	while (true)
 	{
@@ -57,7 +57,7 @@ int main()
 		if (inputManager.WasPressedDown('a'))
 		{
 			std::cout << "the a key is pressed" << std::endl;
-			audioManager->PlaySound("game_sword.wav"); //waits for every sound to finish before playing the next one if held down
+			audioManager->PlaySound("assets/game_sword.wav"); //waits for every sound to finish before playing the next one if held down
 		}
 		//test outputs error since file was not added properly
 		if (inputManager.WasPressedDown('w'))
@@ -69,7 +69,7 @@ int main()
 		if (inputManager.WasPressedDown('s'))
 		{
 			std::cout << "the s key is pressed" << std::endl;
-			audioManager->SetSongVolume("game_music.wav", .2);
+			audioManager->SetSongVolume("assets/game_music.wav", .2);
 		}
 		//pauses all the audio
 		if (inputManager.WasPressedDown('d'))
