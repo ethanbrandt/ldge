@@ -536,6 +536,9 @@ int main()
 
 
 
+    delete circle1;
+    delete rectangle1;
+    delete rectangle2;
     delete shapeC;
     delete shapeD;
     delete shapeE;
