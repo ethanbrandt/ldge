@@ -9,6 +9,7 @@
 #include "../rendering/Actor.h"
 #include "../rendering/RenderManager.h"
 #include "../physics/Rigidbody.h"
+#include "../physics/PhysicsManager.h"
 #include "../input/InputManager.h"
 #include "../audio/AudioManager.h"
 
@@ -98,6 +99,12 @@ void ScriptManager::Load(EntityRecord* _record)
 		_record->script.onDestroyRef = luaL_ref(L, LUA_REGISTRYINDEX);
 	else
 		lua_pop(L, 1);
+
+	lua_getglobal(L, "on_message_received");
+	if (lua_isfunction(L, -1))
+		_record->script.onMessageReceivedRef = luaL_ref(L, LUA_REGISTRYINDEX);
+	else
+		lua_pop(L, 1);
 }
 
 void ScriptManager::BindAPI()
@@ -125,6 +132,14 @@ void ScriptManager::BindAPI()
 	lua_pushlightuserdata(L, this);
 	lua_pushcclosure(L, &ScriptManager::l_SetVelocity, 1);
 	lua_setglobal(L, "SetVelocity");
+
+	lua_pushlightuserdata(L, this);
+	lua_pushcclosure(L, &ScriptManager::l_IsTrigger, 1);
+	lua_setglobal(L, "IsTrigger");
+
+	lua_pushlightuserdata(L, this);
+	lua_pushcclosure(L, &ScriptManager::l_IsStatic, 1);
+	lua_setglobal(L, "IsStatic");
 
 	lua_pushlightuserdata(L, this);
 	lua_pushcclosure(L, &ScriptManager::l_SetSprite, 1);
@@ -181,6 +196,14 @@ void ScriptManager::BindAPI()
 	lua_pushlightuserdata(L, this);
 	lua_pushcclosure(L, &ScriptManager::l_LoadEntityFromFile, 1);
 	lua_setglobal(L, "LoadEntityFromFile");
+
+	lua_pushlightuserdata(L, this);
+	lua_pushcclosure(L, &ScriptManager::l_DestroyEntity, 1);
+	lua_setglobal(L, "DestroyEntity");
+
+	lua_pushlightuserdata(L, this);
+	lua_pushcclosure(L, &ScriptManager::l_SendMessage, 1);
+	lua_setglobal(L, "SendMessage");
 }
 
 #pragma region TO_LUA_INTERFACES
@@ -222,19 +245,68 @@ void ScriptManager::Update(float _deltaTime, int _screenWidth, int _screenHeight
 	}
 }
 
-void ScriptManager::OnTrigger(EntityId _e, RigidBody& _other)
+void ScriptManager::OnTrigger(EntityId _e, EntityId _other)
 {
-
+	EntityRecord* r = &records[_e];
+	if (r->script.onTriggerRef != LUA_NOREF)
+	{
+		lua_rawgeti(L, LUA_REGISTRYINDEX, r->script.onTriggerRef);
+		lua_pushinteger(L, (lua_Integer)_e);
+		lua_pushinteger(L, (lua_Integer)_other);
+		if (lua_pcall(L, 2, 0, 0) != LUA_OK)
+		{
+			std::cerr << "OnTrigger Error: " << lua_tostring(L, -1) << std::endl;
+			lua_pop(L, 1);
+		}
+	}
 }
 
-void ScriptManager::OnCollision(EntityId _e, RigidBody& _other)
+void ScriptManager::OnCollision(EntityId _e, EntityId _other)
 {
+	EntityRecord* r = &records[_e];
+	if (r->script.onCollisionRef != LUA_NOREF)
+	{
+		lua_rawgeti(L, LUA_REGISTRYINDEX, r->script.onCollisionRef);
+		lua_pushinteger(L, (lua_Integer)_e);
+		lua_pushinteger(L, (lua_Integer)_other);
+		if (lua_pcall(L, 2, 0, 0) != LUA_OK)
+		{
+			std::cerr << "OnCollision Error: " << lua_tostring(L, -1) << std::endl;
+			lua_pop(L, 1);
+		}
+	}
+}
 
+void ScriptManager::OnMessageReceived(EntityId _e, EntityId _sender, const char* _message)
+{
+	EntityRecord* r = &records[_e];
+	if (r->script.onMessageReceivedRef != LUA_NOREF)
+	{
+		lua_rawgeti(L, LUA_REGISTRYINDEX, r->script.onMessageReceivedRef);
+		lua_pushinteger(L, (lua_Integer)_e);
+		lua_pushinteger(L, (lua_Integer)_sender);
+		lua_pushstring(L, _message);
+		if (lua_pcall(L, 3, 0, 0) != LUA_OK)
+		{
+			std::cerr << "OnMessageReceived Error: " << lua_tostring(L, -1) << std::endl;
+			lua_pop(L, 1);
+		}
+	}
 }
 
 void ScriptManager::OnDestroy(EntityId _e)
 {
-
+	EntityRecord* r = &records[_e];
+	if (r->script.onDestroyRef != LUA_NOREF)
+	{
+		lua_rawgeti(L, LUA_REGISTRYINDEX, r->script.onDestroyRef);
+		lua_pushinteger(L, (lua_Integer)_e);
+		if (lua_pcall(L, 1, 0, 0) != LUA_OK)
+		{
+			std::cerr << "OnDestroy Error: " << lua_tostring(L, -1) << std::endl;
+			lua_pop(L, 1);
+		}
+	}
 }
 
 #pragma endregion
@@ -274,7 +346,9 @@ int ScriptManager::l_LoadFontFromFile(lua_State* _L)
 int ScriptManager::l_LoadEntityFromFile(lua_State* _L)
 {
 	const char* s = luaL_checkstring(_L, 1);
-	EntityId id = FileHandler::GetInstance()->LoadEntityFromFile(s);
+	float x = (float)luaL_checknumber(_L, 2);
+	float y = (float)luaL_checknumber(_L, 3);
+	EntityId id = FileHandler::GetInstance()->LoadEntityFromFile(s, Vector2(x, y));
 	lua_pushinteger(_L, id);	
 	return 1;
 }
@@ -340,6 +414,36 @@ int ScriptManager::l_GetVelocity(lua_State* _L)
 	lua_pushnumber(_L, vel.GetX());
 	lua_pushnumber(_L, vel.GetY());
 	return 2;
+}
+
+int ScriptManager::l_IsTrigger(lua_State* _L)
+{
+	EntityId id = (EntityId)luaL_checkinteger(_L, 1);
+	auto i = instance->records.find(id);
+	if (i == instance->records.end())
+	{
+		lua_pushnil(_L);
+		return 1;
+	}
+
+	bool isTrigger = i->second.rigidBody->GetColShape()->IsTrigger();
+	lua_pushboolean(_L, isTrigger);
+	return 1;
+}
+
+int ScriptManager::l_IsStatic(lua_State* _L)
+{
+	EntityId id = (EntityId)luaL_checkinteger(_L, 1);
+	auto i = instance->records.find(id);
+	if (i == instance->records.end())
+	{
+		lua_pushnil(_L);
+		return 1;
+	}
+
+	bool isStatic = i->second.rigidBody->IsStatic();
+	lua_pushboolean(_L, isStatic);
+	return 1;
 }
 
 // Actor Interfaces
@@ -454,6 +558,29 @@ int ScriptManager::l_WasReleased(lua_State* _L)
 	return 1;
 }
 
+// Control Interfaces
+int ScriptManager::l_DestroyEntity(lua_State* _L)
+{
+	EntityId destroyId = luaL_checkinteger(_L, 1);
+	auto i = instance->records.find(destroyId);
+	if (i == instance->records.end())
+		return 0;
+	instance->DestroyEntityRecord(destroyId);
+	return 0;
+}
+
+int ScriptManager::l_SendMessage(lua_State* _L)
+{
+	EntityId id = luaL_checkinteger(_L, 1);
+	EntityId receiverId = luaL_checkinteger(_L, 2);
+	const char* s = luaL_checkstring(_L, 3);
+	auto i = instance->records.find(receiverId);
+	if (i == instance->records.end())
+		return 0;
+	instance->OnMessageReceived(receiverId, id, s);
+	return 0;
+}
+
 #pragma endregion
 
 EntityId ScriptManager::CreateEntityRecord(std::string _scriptFilePath, Actor* _actor, RigidBody* _rigidBody)
@@ -471,9 +598,14 @@ EntityId ScriptManager::CreateEntityRecord(std::string _scriptFilePath, Actor* _
 	record.rigidBody = _rigidBody;
 
 	records[entity] = record;
-
-	std::cout << "Created Entity Record" << std::endl;
-
+	
+	PhysicsManager::GetInstance()->RegisterRigidBody(_rigidBody, entity);
+	RenderManager::GetInstance()->RegisterActor(_actor);
+	
+	Start(entity);
+	
+	std::cout << "Created Entity Record: " << entity << std::endl;
+	
 	return entity;
 }
 
@@ -484,5 +616,15 @@ EntityRecord ScriptManager::GetEntityRecord(EntityId _e)
 
 void ScriptManager::DestroyEntityRecord(EntityId _e)
 {
-	// TODO: IMPLEMENT
+	OnDestroy(_e);
+
+	PhysicsManager::GetInstance()->UnregisterRigidBody(records[_e].rigidBody);
+	RenderManager::GetInstance()->UnregisterActor(records[_e].actor);
+	
+	delete records[_e].rigidBody;
+	delete records[_e].actor;
+
+	records.erase(_e);
+
+	std::cout << "Destroyed Entity Record: " << _e << std::endl;
 }

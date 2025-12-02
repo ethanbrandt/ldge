@@ -57,7 +57,7 @@ int main()
 	renderManager.SetUITextFont(uiText, "assets/bytesized-mono.bmp");
 
 	std::string entityFilePath = "assets/test_entity_2.json";
-	EntityId id = fileHandler.LoadEntityFromFile(entityFilePath);
+	EntityId id = fileHandler.LoadEntityFromFile(entityFilePath, Vector2(0,0));
 	if (id == -1)
 	{
 		std::cerr << "fileHandler Error" << std::endl;
@@ -115,11 +115,11 @@ int main()
 			}
 		}
 
-		scriptManager.Update(1.0f/60.0f);
-		inputManager.UpdateInput();
-		
 		int w, h;
 		SDL_GetWindowSize(window, &w, &h);
+		scriptManager.Update(1.0f/60.0f, w, h);
+		inputManager.UpdateInput();
+		
 		renderManager.RenderAll(w, h);
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(16)); // ~60 FPS

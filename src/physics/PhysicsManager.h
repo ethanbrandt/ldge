@@ -31,6 +31,9 @@ public:
 	{
 		for (RigidBody* rb : rbs)
 		{
+			if (rb->IsStatic())
+				continue;
+			
 			Vector2 currPos = rb->GetPosition();
 			rb->SetPosition((_deltaTime * rb->GetVelocity()) + currPos);
 		}
@@ -43,14 +46,14 @@ public:
 
 		for (RigidBodyPair rbPair : triggered)
 		{
-			ScriptManager::GetInstance()->OnTrigger(rbToEntity[rbPair.a], *rbPair.b);
-			ScriptManager::GetInstance()->OnTrigger(rbToEntity[rbPair.b], *rbPair.a);
+			ScriptManager::GetInstance()->OnTrigger(rbToEntity[rbPair.a], rbToEntity[rbPair.b]);
+			ScriptManager::GetInstance()->OnTrigger(rbToEntity[rbPair.b], rbToEntity[rbPair.a]);
 		}
 
 		for (RigidBodyPair rbPair : collided)
 		{
-			ScriptManager::GetInstance()->OnCollision(rbToEntity[rbPair.a], *rbPair.b);
-			ScriptManager::GetInstance()->OnCollision(rbToEntity[rbPair.b], *rbPair.a);
+			ScriptManager::GetInstance()->OnCollision(rbToEntity[rbPair.a], rbToEntity[rbPair.b]);
+			ScriptManager::GetInstance()->OnCollision(rbToEntity[rbPair.b], rbToEntity[rbPair.a]);
 		}
 	}
 
@@ -58,6 +61,8 @@ public:
 	{
 		rbs.push_back(_rb);
 		rbToEntity[_rb] = _id;
+		CollisionShape* s = _rb->GetColShape();
+		std::cout << s->GetColMask() << std::endl;
 	}
 
 	void UnregisterRigidBody(RigidBody* _rb)

@@ -411,6 +411,8 @@ void RigidBody::ResolveAllCollisions(std::vector <RigidBody*>& bodies)
 	}
 }
 
+#include <iostream>
+
 void RigidBody::ReturnTriggersAndCollisions(std::vector <RigidBody*>& bodies, std::vector<RigidBodyPair>& triggered, std::vector<RigidBodyPair>& collided)
 {
 	CollisionResult res;
@@ -421,8 +423,10 @@ void RigidBody::ReturnTriggersAndCollisions(std::vector <RigidBody*>& bodies, st
 		{
 			res = DetectCollision(*bodies[i], *bodies[j]);
 			if(!res.collided)
-				continue;
-
+			continue;
+			
+			std::cout << "collision" << std::endl;
+			
 			if(bodies[i]->GetColShape()->IsTrigger() || bodies[j]->GetColShape()->IsTrigger())
 				triggered.push_back(RigidBodyPair(bodies[i], bodies[j]));
 			else

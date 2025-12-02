@@ -1,0 +1,18 @@
+{
+    "tileGrid" : {
+        "tileSetPath" : "assets/test-tileset.bmp",
+        "tileSize"    : 8,
+        "tileMapPath" : "assets/map.txt"
+    },
+    "songPath" : "assets/game_music.json",
+    "entities" : [
+        {
+            "filePath" : "assets/test_entity.json",
+            "position" : [1, 80]
+        },
+        {
+            "filePath" : "assets/test_entity_2.json",
+            "position" : [0,0]
+        }
+    ]
+}

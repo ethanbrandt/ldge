@@ -2,13 +2,13 @@
 	"scriptFilePath" : "scripts/test_script.lua",
 	"rigidBody" : {
 		"mass" : 1,
-		"isStatic" : true,
+		"isStatic" : false,
 		"collisionRectangle" : {
-			"width" : 2,
-			"height" : 3.5,
+			"width" : 32,
+			"height" : 32,
 			"offset" : [0, 0],
 			"isTrigger" : false,
-			"collisionMask" : 0
+			"collisionMask" : 1
 		}
 	},
 	"spriteSheet" : {

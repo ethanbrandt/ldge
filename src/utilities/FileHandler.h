@@ -9,6 +9,7 @@ using json = nlohmann::json;
 #include "../rendering/RenderManager.h"
 #include "../audio/AudioManager.h"
 #include "../gorm/ScriptManager.h"
+#include "Vector2.h"
 
 struct AudioFile
 {
@@ -39,10 +40,10 @@ public:
 
 	void LoadAudioFromFile(std::string _filePath);
 	void LoadFontFromFile(std::string _filePath);
-	
-	EntityId LoadEntityFromFile(std::string _filePath);
+	EntityId LoadEntityFromFile(std::string _filePath, Vector2 _startPos);
+	void LoadSceneFromFile(std::string _filePath);
+
 	void LoadUILayoutFromFile(std::string _filePath); // TODO: WILL BE IMPLEMENTED WHEN FULL SYSTEM IS FURTHER IMPLEMENTED
-	void LoadSceneFromFile(std::string _filePath); // TODO: WILL BE IMPLEMENTED WHEN FULL SYSTEM IS FURTHER IMPLEMENTED
 
 	static FileHandler* GetInstance();
 };
