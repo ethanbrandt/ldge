@@ -143,7 +143,7 @@ void FileHandler::LoadFontFromFile(std::string _filePath)
 }
 
 
-EntityId FileHandler::LoadEntityFromFile(std::string _filePath)
+EntityId FileHandler::LoadEntityFromFile(std::string _filePath, Vector2 _startPos = Vector2(0,0))
 {
 	std::ifstream f(_filePath);
 	if (!f)
@@ -173,7 +173,8 @@ EntityId FileHandler::LoadEntityFromFile(std::string _filePath)
 	if (errorFlag)
 		return -1;
 
-	rb->SetPosition(Vector2(0,0));
+	rb->SetPosition(_startPos);
+
 	return ScriptManager::GetInstance()->CreateEntityRecord(scriptFilePath, actor, rb);
 }
 
@@ -218,8 +219,8 @@ RigidBody* FileHandler::LoadRigidbody(json entityData, std::string& filePath, bo
 			if (entityData[currentKey]["collisionCircle"].contains("isTrigger"))
 				isTrigger = entityData[currentKey]["collisionCircle"]["isTrigger"].get<bool>();
 
-			if (entityData[currentKey]["collisionCircle"].contains("colMask"))
-				colMask = entityData[currentKey]["collisionCircle"]["colMask"].get<int>();
+			if (entityData[currentKey]["collisionCircle"].contains("collisionMask"))
+				colMask = entityData[currentKey]["collisionCircle"]["collisionMask"].get<int>();
 
 			if (!errorFlag)
 				colShape = new CollisionCircle(radius, offset, isTrigger, colMask);	
@@ -254,9 +255,9 @@ RigidBody* FileHandler::LoadRigidbody(json entityData, std::string& filePath, bo
 			if (entityData[currentKey]["collisionRectangle"].contains("isTrigger"))
 				isTrigger = entityData[currentKey]["collisionRectangle"]["isTrigger"].get<bool>();
 
-			if (entityData[currentKey]["collisionRectangle"].contains("colMask"))
-				colMask = entityData[currentKey]["collisionRectangle"]["colMask"].get<int>();
-
+			if (entityData[currentKey]["collisionRectangle"].contains("collisionMask"))
+				colMask = entityData[currentKey]["collisionRectangle"]["collisionMask"].get<int>();
+			
 			if (!errorFlag)
 				colShape = new CollisionRectangle(width, height, offset, isTrigger, colMask);	
 		}
@@ -271,6 +272,8 @@ RigidBody* FileHandler::LoadRigidbody(json entityData, std::string& filePath, bo
 		std::cerr << filePath << " does not contain key: " << currentKey << std::endl;
 		errorFlag = true;
 	}
+
+	std::cout << colShape->GetColMask() << std::endl;
 
 	return new RigidBody(Vector2(0,0), Vector2(0,0), mass, colShape, isStatic);
 }
@@ -353,4 +356,90 @@ Actor* FileHandler::LoadActor(json entityData, std::string& filePath, bool& erro
 	}
 
 	return actor;
+}
+
+struct EntityPosPair
+{
+	std::string filePath;
+	Vector2 pos;
+};
+
+void from_json(const json& j, EntityPosPair& pair)
+{
+	j.at("filePath").get_to(pair.filePath);
+	std::vector<float> posVect;
+	j.at("position").get_to(posVect);
+	pair.pos = Vector2(0,0);
+	if (posVect.size() >= 2)
+		pair.pos = Vector2(posVect[0], posVect[1]);
+}
+
+void FileHandler::LoadSceneFromFile(std::string _filePath)
+{
+	std::ifstream f(_filePath);
+	if (!f)
+	{
+		std::cerr << "Error Loading File: " << _filePath << std::endl;
+		return;
+	}
+
+	json sceneData = json::parse(f);
+
+	bool errorFlag = false;
+
+	const std::string TILE_GRID = "tileGrid";
+	if (sceneData.contains(TILE_GRID))
+	{
+		std::string tileSetPath;
+		int tileSize;
+		std::string tileMapPath;
+
+		const std::string TILE_SET_PATH = "tileSetPath";
+		if (sceneData[TILE_GRID].contains(TILE_SET_PATH))
+			tileSetPath = sceneData[TILE_GRID][TILE_SET_PATH].get<std::string>();
+		else
+		{
+			std::cerr << TILE_GRID << " must have " << TILE_SET_PATH << std::endl;
+			errorFlag = true;
+		}
+
+		const std::string TILE_SIZE = "tileSize";
+		if (sceneData[TILE_GRID].contains(TILE_SIZE))
+			tileSize = sceneData[TILE_GRID][TILE_SIZE].get<int>();
+		else
+		{
+			std::cerr << TILE_GRID << " must have " << TILE_SET_PATH << std::endl;
+			errorFlag = true;
+		}
+
+		const std::string TILE_MAP_PATH = "tileMapPath";
+		if (sceneData[TILE_GRID].contains(TILE_MAP_PATH))
+			tileMapPath = sceneData[TILE_GRID][TILE_MAP_PATH].get<std::string>();
+		else
+		{
+			std::cerr << TILE_GRID << " must have " << TILE_MAP_PATH << std::endl;
+			errorFlag = true;
+		}
+
+		if (!errorFlag)
+		{
+			RenderManager::GetInstance()->LoadTileSet(tileSetPath, tileSize);
+			RenderManager::GetInstance()->LoadTileMap(tileMapPath);
+		}
+
+		const std::string SONG_PATH = "songPath";
+		if (sceneData.contains(SONG_PATH))
+		{
+			std::string songPath = sceneData[SONG_PATH].get<std::string>();
+			LoadAudioFromFile(songPath);
+		}
+
+		const std::string ENTITIES = "entities";
+		if (sceneData.contains(ENTITIES))
+		{
+			std::vector<EntityPosPair> entities = sceneData[ENTITIES].get<std::vector<EntityPosPair>>();
+			for (EntityPosPair p : entities)
+				LoadEntityFromFile(p.filePath, p.pos);
+		}
+	}
 }

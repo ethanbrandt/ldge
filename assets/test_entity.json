@@ -4,10 +4,10 @@
 		"mass" : 1,
 		"isStatic" : false,
 		"collisionCircle" : {
-			"radius" : 2,
+			"radius" : 16,
 			"offset" : [0, 0],
 			"isTrigger" : false,
-			"collisionMask" : 0
+			"collisionMask" : 1
 		}
 	},
 	"sprite" : {

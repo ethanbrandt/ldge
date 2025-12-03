@@ -18,6 +18,7 @@ struct Script
 	int onUpdateRef = LUA_NOREF;
 	int onTriggerRef = LUA_NOREF;
 	int onCollisionRef = LUA_NOREF;
+	int onMessageReceivedRef = LUA_NOREF;
 	int onDestroyRef = LUA_NOREF;
 };
 
@@ -54,8 +55,8 @@ private:
 	static int l_GetPosition(lua_State* _L);
 	static int l_SetVelocity(lua_State* _L);
 	static int l_GetVelocity(lua_State* _L);
-	static int l_IsTrigger(lua_State* _L); //TODO
-	static int l_IsStatic(lua_State* _L); //TODO
+	static int l_IsTrigger(lua_State* _L);
+	static int l_IsStatic(lua_State* _L);
 
 	// Actor Interfaces
 	static int l_SetSprite(lua_State* _L);
@@ -74,6 +75,10 @@ private:
 	static int l_WasPressedDown(lua_State* _L);
 	static int l_WasReleased(lua_State* _L);
 
+	// Control Interfaces
+	static int l_DestroyEntity(lua_State* _L);
+	static int l_SendMessage(lua_State* _L);
+
 public:
 	ScriptManager();
 	~ScriptManager();
@@ -86,7 +91,8 @@ public:
 
 	void Start(EntityId _e);
 	void Update(float _deltaTime, int _screenWidth, int _screenHeight);
-	void OnTrigger(EntityId _e, RigidBody& _other);
-	void OnCollision(EntityId _e, RigidBody& _other);
+	void OnTrigger(EntityId _e, EntityId _other);
+	void OnCollision(EntityId _e, EntityId _other);
+	void OnMessageReceived(EntityId _e, EntityId _sender, const char* _message);
 	void OnDestroy(EntityId _e);
 };

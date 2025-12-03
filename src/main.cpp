@@ -41,26 +41,9 @@ int main()
 	FileHandler fileHandler;
 	PhysicsManager physicsManager;
 
-	std::string entityFilePath = "assets/test_entity.json";
-	EntityId id = fileHandler.LoadEntityFromFile(entityFilePath);
-	if (id == -1)
-	{
-		std::cerr << "fileHandler Error" << std::endl;
-		return 0;
-	}
-
-	std::string entityFilePath = "assets/test_entity_2.json";
-	EntityId id = fileHandler.LoadEntityFromFile(entityFilePath);
-	if (id == -1)
-	{
-		std::cerr << "fileHandler Error" << std::endl;
-		return 0;
-	}
-
-	physicsManager.RegisterRigidBody(scriptManager.GetEntityRecord(id).rigidBody, id);
-
-	scriptManager.Start(id);
-	renderManager.RegisterActor(scriptManager.GetEntityRecord(id).actor);
+	const std::string START_SCENE_FILE_PATH;
+	fileHandler.LoadSceneFromFile("assets/start_scene.json");
+	audioManager.PlayAllSongs();
 
 	const auto frameTime = std::chrono::microseconds((int)std::ceil(1000000.0 / FRAMES_PER_SECOND));
 	auto nextTick = std::chrono::steady_clock::now();

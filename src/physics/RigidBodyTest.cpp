@@ -471,18 +471,19 @@ int main()
     RigidBody body1(Vector2(0,3), Vector2(0,0), 1, circle1, true);
     RigidBody body2(Vector2(2,0), Vector2(0,0), 1, rectangle1, false);
     RigidBody body3(Vector2(0,3), Vector2(0,0), 1, rectangle2, false);
+/*
+    std::vector <RigidBody*> bodies = {&body1, &body2, &body3};
 
-    std::vector <RigidBody> bodies = {body1, body2, body3};
-
-    std::vector <RigidBody> BodyTriggers = RigidBody::DetectTrigger(bodies);
-    std::vector <RigidBody> BodyCollides = RigidBody::ReturnCollisions(bodies);
+    std::vector <RigidBodyPair> BodyTriggers;
+    std::vector <RigidBodyPair> BodyCollides;
+    RigidBody::ReturnTriggersAndCollisions(bodies, BodyTriggers, BodyCollides);
     RigidBody::ResolveAllCollisions(bodies);
 
     for(int i=0; i<bodies.size()-1; i++)
     {
-        cout<<1<<" of pair "<<i<<" was pushed to "<<bodies[i].GetPosition().GetX()<<" "<<bodies[i].GetPosition().GetY()<<"\n";
-        cout<<2<<" of pair "<<i<<" was pushed to "<<bodies[i+1].GetPosition().GetX()<<" "<<bodies[i+1].GetPosition().GetY()<<"\n";
-        distance = sqrt(pow(bodies[i].GetPosition().GetX() - bodies[i+1].GetPosition().GetX(),2) + pow(bodies[i].GetPosition().GetY() - bodies[i+1].GetPosition().GetY(),2));
+        cout<<1<<" of pair "<<i<<" was pushed to "<< bodies[i]->GetPosition().GetX()<<" "<<bodies[i]->GetPosition().GetY()<<"\n";
+        cout<<2<<" of pair "<<i<<" was pushed to "<<bodies[i+1]->GetPosition().GetX()<<" "<<bodies[i+1]->GetPosition().GetY()<<"\n";
+        distance = sqrt(pow(bodies[i].GetPosition().GetX() - bodies[i+1].GetPosition().GetX(),2) + pow(bodies[i]->GetPosition().GetY() - bodies[i+1]->GetPosition().GetY(),2));
         cout<<distance<<"\n";
 
     }
@@ -533,8 +534,7 @@ int main()
         cout<<test<<"\n";
     }
 
-
-
+*/
 
     delete circle1;
     delete rectangle1;

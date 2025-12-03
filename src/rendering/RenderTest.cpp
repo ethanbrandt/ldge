@@ -29,8 +29,8 @@ int main(int argc, char* argv[])
     }
 
 	RenderManager renderManager(renderer);
-	//renderManager.LoadTileSet("assets/test-tileset.bmp", 8);
-	//renderManager.LoadTileMap("assets/map.txt");
+	renderManager.LoadTileSet("assets/test-tileset.bmp", 8);
+	renderManager.LoadTileMap("assets/map.txt");
     
 	Actor player;
     player.LoadSprite(renderer, "assets/sshot0002.bmp");
